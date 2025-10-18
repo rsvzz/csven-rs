@@ -3,4 +3,9 @@
 ### The project is under development
 
 # Build
-    cargo run
+### Default --release don't need to add meson.
+    meson build
+    cd build
+    ninja
+    ninja install
+

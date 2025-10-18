@@ -48,8 +48,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "csven-rs"
-version = "0.1.0"
+name = "csven"
+version = "0.1.20"
 dependencies = [
  "gtk4",
  "libadwaita",
