@@ -4,10 +4,12 @@ use std::rc::Rc;
 use adw::prelude::*;
 use adw::{Application, ApplicationWindow, HeaderBar, ViewStack, ViewSwitcher};
 
-use gtk::{Box, gio, Label, MenuButton, Orientation};
+use gtk::{Box, Label, MenuButton, Orientation, gio};
 
 mod model;
 mod pages;
+use pages::Drag;
+
 use pages::{Game, ViewPage};
 
 fn main() {
@@ -65,7 +67,31 @@ fn main() {
             .spacing(6)
             .build();
 
-        page2.append(&Label::builder().label("Contenido de la Página 2").build());
+        let p_drag = Drag::build();
+
+        p_drag.edit_word.connect_changed({
+            let drag = p_drag.clone();
+            move |_| {
+                drag.on_change_entry_game();
+            }
+        });
+
+          p_drag.btn_start.connect_clicked({
+            let drag = p_drag.clone();
+            move |_| {
+                let mut str = drag.edit_word.text();
+
+                if str.len() == 0 {
+                    str = drag.name.to_string().into();
+                }
+
+                drag.btn_start.set_sensitive(false);
+                drag.set_grid_view_valid(&str);
+                drag.edit_word.set_text("");
+            }
+        });
+
+        page2.append(ViewPage::get_page(&p_drag));
 
         let page3 = Box::builder()
             .orientation(Orientation::Vertical)
@@ -100,9 +126,8 @@ fn main() {
         about_opt.connect_activate(|_, _| {
             println!("About option");
         });
-        
-        app.add_action(&about_opt);
 
+        app.add_action(&about_opt);
 
         let button_menu = MenuButton::builder()
             .icon_name("open-menu-symbolic")

@@ -1,14 +1,12 @@
-use std::ptr::null_mut;
-
 use crate::model::ItemGame;
 use crate::model::OptValid;
 use crate::pages::ViewPage;
 use gtk::gio::prelude::*;
 use gtk::gio::{ListModel, ListStore};
 use gtk::glib::random_int_range;
-use gtk::glib::GString;
+
 use gtk::{Align, Box, Button, Entry, GridView, NoSelection, Orientation, SignalListItemFactory};
-use gtk::{SelectionModel, SingleSelection, glib, prelude::*};
+use gtk::{glib, prelude::*};
 
 #[derive(Clone)]
 pub struct Game {
