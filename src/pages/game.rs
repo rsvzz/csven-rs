@@ -33,7 +33,7 @@ impl Game {
 
         box_word.set_halign(Align::Center);
 
-        let add_word = Entry::builder().placeholder_text("type a word").build();
+        let add_word = Entry::builder().placeholder_text("type a word").max_length(40).build();
 
         let btn_start = Button::builder().icon_name("view-refresh-symbolic").build();
 

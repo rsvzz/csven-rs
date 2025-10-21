@@ -39,12 +39,12 @@ fn main() {
                     str = game.borrow().name.to_string().into();
                 }
 
-                game.borrow().btn_start.set_sensitive(false);
-
-                game.borrow_mut().set_grid_view_valid(&str);
-
-                game.borrow_mut().set_name_game_for_gridview(&str);
-                game.borrow().add_word.set_text("");
+                if str.len() != 0 {
+                    game.borrow().btn_start.set_sensitive(false);
+                    game.borrow_mut().set_grid_view_valid(&str);
+                    game.borrow_mut().set_name_game_for_gridview(&str);
+                    game.borrow().add_word.set_text("");
+                }
             }
         });
 
@@ -76,7 +76,7 @@ fn main() {
             }
         });
 
-          p_drag.btn_start.connect_clicked({
+        p_drag.btn_start.connect_clicked({
             let drag = p_drag.clone();
             move |_| {
                 let mut str = drag.edit_word.text();
@@ -85,9 +85,11 @@ fn main() {
                     str = drag.name.to_string().into();
                 }
 
-                drag.btn_start.set_sensitive(false);
-                drag.set_grid_view_valid(&str);
-                drag.edit_word.set_text("");
+                if str.len() != 0 {
+                    drag.btn_start.set_sensitive(false);
+                    drag.set_grid_view_valid(&str);
+                    drag.edit_word.set_text("");
+                }
             }
         });
 
