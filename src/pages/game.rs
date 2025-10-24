@@ -242,7 +242,7 @@ impl ViewPage for Game {
 }
 
 impl OptValid for Game {
-    fn get_next_name_valid(&self, grid: &GridView) -> Option<ItemGame> {
+    fn get_next_name_valid(grid: &GridView) -> Option<ItemGame> {
         let model = grid.model().and_downcast::<NoSelection>().unwrap();
         let mut item_game: Option<ItemGame> = None;
         for i in 0..model.n_items() {

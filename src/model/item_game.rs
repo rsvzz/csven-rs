@@ -3,6 +3,8 @@ use glib::{Object, Properties};
 use gtk::{GridView, glib, subclass::prelude::*};
 use std::cell::RefCell;
 
+use crate::model::ValidGridView;
+
 glib::wrapper! {
     pub struct ItemGame(ObjectSubclass<imp::ItemGame>);
 }
@@ -22,6 +24,17 @@ impl ItemGame {
             .property("name", name)
             .property("idex", idex)
             .property("status", status)
+            .build()
+    }
+}
+
+impl Default for ItemGame {
+      fn default() -> Self {
+        // Aquí defines cómo se ve un ItemGame "vacío" o por defecto
+       Object::builder()
+            .property("name", "")
+            .property("idex", 0 as i8)
+            .property("status", false)
             .build()
     }
 }

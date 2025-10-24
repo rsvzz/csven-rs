@@ -66,34 +66,33 @@ fn main() {
             .orientation(Orientation::Vertical)
             .spacing(6)
             .build();
+          let p_drag = Rc::new(RefCell::new(Drag::build()));
 
-        let p_drag = Drag::build();
-
-        p_drag.edit_word.connect_changed({
-            let drag = p_drag.clone();
+        p_drag.borrow().edit_word.connect_changed({
+            let drag = Rc::clone(&p_drag);
             move |_| {
-                drag.on_change_entry_game();
+                drag.borrow().on_change_entry_game();
             }
         });
 
-        p_drag.btn_start.connect_clicked({
-            let drag = p_drag.clone();
+        p_drag.borrow_mut().btn_start.connect_clicked({
+            let drag = Rc::clone(&p_drag);
             move |_| {
-                let mut str = drag.edit_word.text();
+                let mut str = drag.borrow().edit_word.text();
 
                 if str.len() == 0 {
-                    str = drag.name.to_string().into();
+                    str = drag.borrow().name.to_string().into();
                 }
 
                 if str.len() != 0 {
-                    drag.btn_start.set_sensitive(false);
-                    drag.set_grid_view_valid(&str);
-                    drag.edit_word.set_text("");
+                    drag.borrow().btn_start.set_sensitive(false);
+                    drag.borrow_mut().set_grid_view_valid(&str);
+                    drag.borrow().edit_word.set_text("");
                 }
             }
         });
 
-        page2.append(ViewPage::get_page(&p_drag));
+        page2.append(ViewPage::get_page(&*p_drag.borrow()));
 
         let page3 = Box::builder()
             .orientation(Orientation::Vertical)
