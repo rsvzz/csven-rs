@@ -1,11 +1,13 @@
 use crate::model::ItemGame;
-use crate::model::OptValid;
 use crate::pages::ViewPage;
 use gtk::gio::prelude::*;
 use gtk::gio::{ListModel, ListStore};
 use gtk::glib::random_int_range;
 
-use gtk::{Align, Box, Button, Entry, GridView, NoSelection, Orientation, SignalListItemFactory};
+use gtk::{
+    Align, Box, Builder, Button, CssProvider, Entry, GridView, NoSelection,
+    STYLE_PROVIDER_PRIORITY_APPLICATION, SignalListItemFactory,
+};
 use gtk::{glib, prelude::*};
 
 #[derive(Clone)]
@@ -13,49 +15,30 @@ pub struct Game {
     p_box: Box,
     pub add_word: Entry,
     pub btn_start: Button,
-    box_word: Box,
     grid_view: GridView,
     grid_view_valid: GridView,
-    pub name : String,
+    provider_css: CssProvider,
+    pub name: String,
 }
 
 impl Game {
-    pub fn new() -> Self {
-        let p_box = Box::builder()
-            .orientation(Orientation::Vertical)
-            .spacing(0)
-            .build();
+    pub fn new(build: &Builder) -> Self {
+        let provider = CssProvider::new();
+        //provider.load_from_path("/usr/local/share/csven/styles/io.github.rsvzz.csven.css"); //release
+        provider.load_from_path("data/styles/io.github.rsvzz.csven.css"); //devmode
 
-        let box_word = Box::builder()
-            .orientation(Orientation::Horizontal)
-            .spacing(6)
-            .build();
+        let p_box: Box = build.object("box_game_main").unwrap();
+        let add_word: Entry = build.object("entry_game_word").unwrap();
+        let btn_start: Button = build.object("btn_game_start").unwrap();
 
-        box_word.set_halign(Align::Center);
+        btn_start.add_css_class("btn_reset");
+        btn_start
+            .style_context()
+            .add_provider(&provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        let add_word = Entry::builder().placeholder_text("type a word").max_length(40).build();
+        let grid_view: GridView = build.object("gv_game").unwrap();
 
-        let btn_start = Button::builder().icon_name("view-refresh-symbolic").build();
-
-        box_word.append(&add_word);
-        box_word.append(&btn_start);
-
-        let grid_view = GridView::builder()
-            .margin_top(10)
-            .halign(Align::Center)
-            .min_columns(7)
-            .max_columns(7)
-            .build();
-
-        let grid_view_valid = GridView::builder()
-            .margin_top(10)
-            .halign(Align::Center)
-            .build();
-
-        p_box.append(&box_word);
-        p_box.append(&grid_view_valid);
-        p_box.append(&grid_view);
-
+        let grid_view_valid: GridView = build.object("g_tittle").unwrap();
         let store = ListStore::builder()
             .item_type(ItemGame::static_type())
             .build();
@@ -68,69 +51,80 @@ impl Game {
 
         let factory = SignalListItemFactory::new();
 
-        factory.connect_setup(|_, list_item| {
-            let button = Button::builder().build();
-            list_item.set_child(Some(&button));
+        factory.connect_setup({
+            let _provider = provider.clone();
+            move |_, list_item| {
+                let button = Button::builder()
+                    .width_request(40)
+                    .height_request(40)
+                    .build();
+                button.add_css_class("btn_ramdon");
+                button
+                    .style_context()
+                    .add_provider(&_provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+                list_item.set_child(Some(&button));
+            }
         });
-        
+
         factory.connect_bind({
             let btn_start_cl = btn_start.clone();
             move |_, list_item| {
-             let button = list_item.child().and_downcast::<Button>().unwrap();
-            let item = list_item.item().and_downcast::<ItemGame>().unwrap();
-            let name = item.name();
-            button.set_label(&name);
-            button.connect_clicked({
-                let c_item = item.clone();
-                let btn = button.clone();
-                let btn_str = btn_start_cl.clone();
-                move |_| {
-                    let model_valid = c_item
-                        .grid_valid()
-                        .model()
-                        .and_downcast::<NoSelection>()
-                        .unwrap();
+                let button = list_item.child().and_downcast::<Button>().unwrap();
+                let item = list_item.item().and_downcast::<ItemGame>().unwrap();
+                let name = item.name();
+                button.set_label(&name);
+                button.connect_clicked({
+                    let c_item = item.clone();
+                    let btn = button.clone();
+                    let btn_str = btn_start_cl.clone();
+                    move |_| {
+                        let model_valid = c_item
+                            .grid_valid()
+                            .model()
+                            .and_downcast::<NoSelection>()
+                            .unwrap();
 
-                    let item_c = btn.label();
+                        let item_c = btn.label();
 
-                    let mut item_game: Option<ItemGame> = None;
-                    let mut status_valid = false;
+                        let mut item_game: Option<ItemGame> = None;
+                        let mut status_valid = false;
 
-                    for i in 0..model_valid.n_items() {
-                        let _item = model_valid.item(i).and_downcast::<ItemGame>().unwrap();
+                        for i in 0..model_valid.n_items() {
+                            let _item = model_valid.item(i).and_downcast::<ItemGame>().unwrap();
 
-                        if _item.status() == true {
-                            item_game = Some(_item);
-                            if i == (model_valid.n_items() - 1){
-                                 status_valid = true;
+                            if _item.status() == true {
+                                item_game = Some(_item);
+                                if i == (model_valid.n_items() - 1) {
+                                    status_valid = true;
+                                }
+                                break;
                             }
-                            break;
                         }
 
-                    }
+                        if status_valid {
+                            btn_str.set_sensitive(true);
+                        }
 
-                    if status_valid{
-                        btn_str.set_sensitive(true);
-                    }
-
-                    if item_game != None {
-                        let item_v = item_game.unwrap();
-                        if item_v.name() == item_c.unwrap().to_string() {
-                            btn.set_sensitive(false);
-                            item_v.set_status(false);
+                        if item_game != None {
+                            let item_v = item_game.unwrap();
+                            if item_v.name() == item_c.unwrap().to_string() {
+                                btn.set_sensitive(false);
+                                item_v.set_status(false);
+                            }
                         }
                     }
-                }
-            });
+                });
 
-               item.bind_property("name", &button, "label")
-                .flags(glib::BindingFlags::SYNC_CREATE)
-                .build();
+                item.bind_property("name", &button, "label")
+                    .flags(glib::BindingFlags::SYNC_CREATE)
+                    .build();
 
-            item.bind_property("status", &button, "sensitive")
-                .flags(glib::BindingFlags::SYNC_CREATE)
-                .build();
-        }});
+                item.bind_property("status", &button, "sensitive")
+                    .flags(glib::BindingFlags::SYNC_CREATE)
+                    .build();
+            }
+        });
 
         grid_view.set_factory(Some(&factory));
         grid_view.set_model(Some(&selectmode));
@@ -139,10 +133,10 @@ impl Game {
             p_box,
             add_word,
             btn_start,
-            box_word,
             grid_view,
             grid_view_valid,
-            name
+            provider_css: provider.clone(),
+            name,
         }
     }
 
@@ -159,9 +153,21 @@ impl Game {
 
         let factory = SignalListItemFactory::new();
 
-        factory.connect_setup(|_, list_item| {
-            let button = Button::builder().build();
-            list_item.set_child(Some(&button));
+        factory.connect_setup({
+            let _provider = self.provider_css.clone();
+            move |_, list_item| {
+                let button = Button::builder()
+                    .width_request(40)
+                    .height_request(40)
+                    .build();
+
+                button.add_css_class("btn_tittle");
+                button
+                    .style_context()
+                    .add_provider(&_provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+                list_item.set_child(Some(&button));
+            }
         });
 
         factory.connect_bind(|_, list_item| {
@@ -206,7 +212,7 @@ impl Game {
             .model()
             .and_downcast::<NoSelection>()
             .unwrap();
-        
+
         self.name = name.to_string();
         for i in 0..model.n_items() {
             let item = model.item(i).and_downcast::<ItemGame>().unwrap();
@@ -214,7 +220,7 @@ impl Game {
             item.set_status(false);
         }
 
-        for (p, c) in name.char_indices() {
+        for (_, c) in name.char_indices() {
             let mut status = false;
 
             while !status {
@@ -238,25 +244,5 @@ impl Game {
 impl ViewPage for Game {
     fn get_page(&self) -> &Box {
         &self.p_box
-    }
-}
-
-impl OptValid for Game {
-    fn get_next_name_valid(grid: &GridView) -> Option<ItemGame> {
-        let model = grid.model().and_downcast::<NoSelection>().unwrap();
-        let mut item_game: Option<ItemGame> = None;
-        for i in 0..model.n_items() {
-            let item = model.item(i).and_downcast::<ItemGame>().unwrap();
-
-            if item.status() == true {
-                item_game = Some(item);
-                break;
-            }
-        }
-        if item_game != None {
-            return item_game;
-        }
-
-        None
     }
 }

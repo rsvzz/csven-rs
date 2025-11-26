@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.96.1 -->
+<interface>
+  <!-- interface-name verb.ui -->
+  <requires lib="gtk" version="4.18"/>
+  <requires lib="libadwaita" version="1.5"/>
+  <object class="AdwDialog" id="verb_dialog">
+    <property name="child">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">5</property>
+        <child>
+          <object class="AdwEntryRow" id="et_verb">
+            <property name="title">Verb :</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwEntryRow" id="et_past">
+            <property name="title">Past :</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwEntryRow" id="et_v3">
+            <property name="title">Participle :</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwEntryRow" id="et_ing">
+            <property name="title">ING :</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkActionBar" id="act_bar">
+            <property name="halign">baseline-center</property>
+            <property name="valign">baseline</property>
+            <child type="start">
+              <object class="GtkButton" id="btn_cancel">
+                <property name="icon-name">edit-delete-symbolic</property>
+                <property name="label">Cancel</property>
+              </object>
+            </child>
+            <child type="end">
+              <object class="GtkButton" id="btn_save">
+                <property name="icon-name">media-record-symbolic</property>
+                <property name="label">Save</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+    <property name="title">Add Verb</property>
+  </object>
+</interface>

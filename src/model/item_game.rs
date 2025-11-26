@@ -3,8 +3,6 @@ use glib::{Object, Properties};
 use gtk::{GridView, glib, subclass::prelude::*};
 use std::cell::RefCell;
 
-use crate::model::ValidGridView;
-
 glib::wrapper! {
     pub struct ItemGame(ObjectSubclass<imp::ItemGame>);
 }

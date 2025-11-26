@@ -1,0 +1,236 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.96.3 -->
+<interface>
+  <!-- interface-name csven.ui -->
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="libadwaita" version="1.7"/>
+  <object class="AdwApplicationWindow" id="app">
+    <property name="content">
+      <object class="AdwToolbarView" id="toolbar_content">
+        <property name="content">
+          <object class="GtkBox" id="bax_main">
+            <property name="halign">baseline</property>
+            <property name="orientation">vertical</property>
+          </object>
+        </property>
+        <child type="top">
+          <object class="AdwHeaderBar" id="header_bar">
+            <property name="title-widget">
+              <object class="AdwViewSwitcher" id="view_switcher">
+                <property name="stack">
+                  <object class="AdwViewStack" id="view_stack">
+                    <child>
+                      <object class="AdwViewStackPage" id="p_game">
+                        <property name="child">
+                          <object class="GtkBox" id="box_game_main">
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkBox" id="pbx_edit">
+                                <property name="halign">center</property>
+                                <property name="spacing">10</property>
+                                <child>
+                                  <object class="GtkEntry" id="entry_game_word"/>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="btn_game_start">
+                                    <property name="icon-name">view-refresh-symbolic</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="halign">baseline-center</property>
+                                <property name="margin-top">5</property>
+                                <child>
+                                  <object class="GtkGridView" id="g_tittle">
+                                    <property name="max-columns">1</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkGridView" id="gv_game">
+                                <property name="halign">baseline-center</property>
+                                <property name="margin-top">5</property>
+                                <property name="min-columns">7</property>
+                              </object>
+                            </child>
+                          </object>
+                        </property>
+                        <property name="icon-name">view-grid-symbolic</property>
+                        <property name="name">word</property>
+                        <property name="title">Words</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwViewStackPage" id="p_drag">
+                        <property name="child">
+                          <object class="GtkBox" id="pdragbox_main">
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkBox" id="dragbx_edit">
+                                <property name="halign">center</property>
+                                <property name="spacing">10</property>
+                                <child>
+                                  <object class="GtkEntry" id="entry_drag_word"/>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="btn_drag_start">
+                                    <property name="icon-name">view-refresh-symbolic</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="halign">baseline-center</property>
+                                <property name="margin-top">5</property>
+                                <child>
+                                  <object class="GtkGridView" id="gdrag_tittle">
+                                    <property name="max-columns">1</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkGridView" id="gv_verb">
+                                <property name="halign">baseline-center</property>
+                                <property name="margin-top">5</property>
+                                <property name="max-columns">1</property>
+                              </object>
+                            </child>
+                          </object>
+                        </property>
+                        <property name="icon-name">preferences-system-privacy-symbolic</property>
+                        <property name="name">drag</property>
+                        <property name="title">Drag</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwViewStackPage" id="pvbox_main">
+                        <property name="child">
+                          <object class="GtkGrid">
+                            <property name="halign">baseline-center</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="css-name">label_tittle</property>
+                                <property name="halign">end</property>
+                                <property name="label">Verb :</property>
+                                <property name="margin-end">10</property>
+                                <layout>
+                                  <property name="column">0</property>
+                                  <property name="row">0</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="lbl_verb">
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                                <layout>
+                                  <property name="column">1</property>
+                                  <property name="row">0</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="css-name">label_tittle</property>
+                                <property name="halign">end</property>
+                                <property name="label">Past :</property>
+                                <property name="margin-end">10</property>
+                                <layout>
+                                  <property name="column">0</property>
+                                  <property name="row">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="lbl_past">
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                                <layout>
+                                  <property name="column">1</property>
+                                  <property name="row">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="css-name">label_tittle</property>
+                                <property name="halign">end</property>
+                                <property name="label">Participle :</property>
+                                <property name="margin-end">10</property>
+                                <layout>
+                                  <property name="column">0</property>
+                                  <property name="row">2</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="lbl_v3">
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                                <layout>
+                                  <property name="column">1</property>
+                                  <property name="row">2</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="css-name">label_tittle</property>
+                                <property name="halign">end</property>
+                                <property name="label">Verb ING :</property>
+                                <property name="margin-end">10</property>
+                                <layout>
+                                  <property name="column">0</property>
+                                  <property name="row">3</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="lbl_ing">
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                                <layout>
+                                  <property name="column">1</property>
+                                  <property name="row">3</property>
+                                </layout>
+                              </object>
+                            </child>
+                          </object>
+                        </property>
+                        <property name="icon-name">view-mirror-symbolic</property>
+                        <property name="name">verb</property>
+                        <property name="title">Compare</property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </property>
+            <child type="start">
+              <object class="GtkImage" id="icon_view">
+                <property name="icon-name">io.github.rsvzz.csven</property>
+              </object>
+            </child>
+            <child type="end">
+              <object class="GtkMenuButton" id="menu_option">
+                <property name="icon-name">open-menu-symbolic</property>
+              </object>
+            </child>
+            <child type="end">
+              <object class="GtkButton" id="btn_add_header">
+                <property name="icon-name">window-new-symbolic</property>
+                <property name="visible">False</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+</interface>

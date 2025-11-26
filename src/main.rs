@@ -2,151 +2,221 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use adw::prelude::*;
-use adw::{Application, ApplicationWindow, HeaderBar, ViewStack, ViewSwitcher};
+use adw::{Application, ApplicationWindow, Dialog, EntryRow, ViewStack};
 
-use gtk::{Box, Label, MenuButton, Orientation, gio};
+use gtk::{
+    Box, Builder, Button, CssProvider, Label, MenuButton, STYLE_PROVIDER_PRIORITY_APPLICATION, gio,
+};
 
 mod model;
 mod pages;
-use pages::Drag;
 
-use pages::{Game, ViewPage};
+use model::ChangeChar;
+use pages::{Drag, Game};
 
 fn main() {
+    let _ = gtk::init(); //need CssProvider
+    let provider = CssProvider::new();
+    //provider.load_from_path("/usr/local/share/csven/styles/io.github.rsvzz.csven.css"); //release
+    provider.load_from_path("data/styles/io.github.rsvzz.csven.css"); //devmode
+
     let app = Application::builder()
         .application_id("io.github.rsvzz.csven")
         .build();
 
-    app.connect_activate(|app| {
-        // Crear la ventana principal
-        let window = ApplicationWindow::builder()
-            .application(app)
-            .default_width(700)
-            .default_height(600)
-            .build();
+    app.connect_activate({
+        let _provider = provider.clone();
+        move |app| {
+            // Crear la ventana principal
+            let build = Builder::from_file("/usr/local/share/csven/ui/csven.ui");
+            let window: ApplicationWindow = build.object("app").unwrap();
+            window.set_default_width(700);
+            window.set_default_height(600);
+            window.set_application(Some(app));
 
-        let view_stack = ViewStack::builder().build();
+            let view_stack: ViewStack = build.object("view_stack").unwrap();
 
-        let p_game = Rc::new(RefCell::new(Game::new()));
+            let p_game = Rc::new(RefCell::new(Game::new(&build)));
 
-        p_game.borrow_mut().btn_start.connect_clicked({
-            let game = Rc::clone(&p_game);
-            move |_| {
-                //game.borrow_mut().on_clicked_button_start();
-                //self is Clone
-                let mut str = game.borrow().add_word.text();
-                if str.len() == 0 {
-                    str = game.borrow().name.to_string().into();
+            p_game.borrow_mut().btn_start.connect_clicked({
+                let game = Rc::clone(&p_game);
+                move |_| {
+                    let mut str = game.borrow().add_word.text();
+                    if str.len() == 0 {
+                        str = game.borrow().name.to_string().into();
+                    }
+
+                    if str.len() != 0 {
+                        game.borrow().btn_start.set_sensitive(false);
+                        game.borrow_mut().set_grid_view_valid(&str);
+                        game.borrow_mut().set_name_game_for_gridview(&str);
+                        game.borrow().add_word.set_text("");
+                    }
                 }
+            });
 
-                if str.len() != 0 {
-                    game.borrow().btn_start.set_sensitive(false);
-                    game.borrow_mut().set_grid_view_valid(&str);
-                    game.borrow_mut().set_name_game_for_gridview(&str);
-                    game.borrow().add_word.set_text("");
+            p_game.borrow_mut().add_word.connect_changed({
+                let game = Rc::clone(&p_game);
+                move |_| {
+                    game.borrow().on_change_entry_game();
                 }
-            }
-        });
+            });
 
-        p_game.borrow_mut().add_word.connect_changed({
-            let game = Rc::clone(&p_game);
-            move |_| {
-                game.borrow().on_change_entry_game();
-            }
-        });
+            let p_drag = Rc::new(RefCell::new(Drag::build(&build)));
 
-        let page1 = Box::builder()
-            .orientation(Orientation::Vertical)
-            .spacing(6)
-            .build();
-
-        page1.append(ViewPage::get_page(&*p_game.borrow()));
-
-        let page2 = Box::builder()
-            .orientation(Orientation::Vertical)
-            .spacing(6)
-            .build();
-          let p_drag = Rc::new(RefCell::new(Drag::build()));
-
-        p_drag.borrow().edit_word.connect_changed({
-            let drag = Rc::clone(&p_drag);
-            move |_| {
-                drag.borrow().on_change_entry_game();
-            }
-        });
-
-        p_drag.borrow_mut().btn_start.connect_clicked({
-            let drag = Rc::clone(&p_drag);
-            move |_| {
-                let mut str = drag.borrow().edit_word.text();
-
-                if str.len() == 0 {
-                    str = drag.borrow().name.to_string().into();
+            p_drag.borrow().edit_word.connect_changed({
+                let drag = Rc::clone(&p_drag);
+                move |_| {
+                    drag.borrow().on_change_entry_game();
                 }
+            });
 
-                if str.len() != 0 {
-                    drag.borrow().btn_start.set_sensitive(false);
-                    drag.borrow_mut().set_grid_view_valid(&str);
-                    drag.borrow().edit_word.set_text("");
+            p_drag.borrow_mut().btn_start.connect_clicked({
+                let drag = Rc::clone(&p_drag);
+                move |_| {
+                    let mut str = drag.borrow().edit_word.text();
+
+                    if str.len() == 0 {
+                        str = drag.borrow().name.to_string().into();
+                    }
+
+                    if str.len() != 0 {
+                        drag.borrow().btn_start.set_sensitive(false);
+                        drag.borrow_mut().set_grid_view_valid(&str);
+                        drag.borrow().edit_word.set_text("");
+                    }
                 }
-            }
-        });
+            });
 
-        page2.append(ViewPage::get_page(&*p_drag.borrow()));
+            let btn_add: Button = build.object("btn_add_header").unwrap();
+            let stack_view: ViewStack = build.object("view_stack").unwrap();
 
-        let page3 = Box::builder()
-            .orientation(Orientation::Vertical)
-            .spacing(6)
-            .build();
+            //let verb_ui: Builder = Builder::from_file("/usr/local/share/csven/ui/verb.ui"); //release
+            let verb_ui: Builder = Builder::from_file("/usr/local/share/csven/ui/verb.ui"); //devmode
+            btn_add.connect_clicked({
+                let _app = window.clone();
+                let _verb = verb_ui.clone();
+                let _build_ui = build.clone();
+                let _provider = provider.clone();
+                move |_| {
+                    let dialog: Dialog = _verb.object("verb_dialog").unwrap();
+                    let btn_save: Button = _verb.object("btn_save").unwrap();
+                    let btn_cancel: Button = _verb.object("btn_cancel").unwrap();
+                    btn_save.connect_clicked({
+                        let _build = _build_ui.clone();
+                        let _bverb = _verb.clone();
+                        let _dialog = dialog.clone();
+                        let __provider = _provider.clone();
+                        move |_| {
+                            let et_verb: EntryRow = _bverb.object("et_verb").unwrap();
+                            let et_past: EntryRow = _bverb.object("et_past").unwrap();
+                            let et_v3: EntryRow = _bverb.object("et_v3").unwrap();
+                            let et_ing: EntryRow = _bverb.object("et_ing").unwrap();
 
-        page3.append(&Label::builder().label("Contenido de la Página 3").build());
+                            if et_verb.text_length() > 0
+                                && et_ing.text_length() > 0
+                                && et_v3.text_length() > 0
+                                && et_ing.text_length() > 0
+                            {
+                                let lbl_verb: Label = _build.object("lbl_verb").unwrap();
+                                let lbl_past: Label = _build.object("lbl_past").unwrap();
+                                let lbl_v3: Label = _build.object("lbl_v3").unwrap();
+                                let lbl_ing: Label = _build.object("lbl_ing").unwrap();
 
-        view_stack.add_titled_with_icon(&page1, Some("page1"), "Game", "view-app-grid-symbolic");
-        view_stack.add_titled_with_icon(
-            &page2,
-            Some("page2"),
-            "Drag Game",
-            "list-drag-handle-symbolic",
-        );
-        view_stack.add_titled_with_icon(
-            &page3,
-            Some("page3"),
-            "Página 3",
-            "input-keyboard-symbolic",
-        );
+                                lbl_verb.add_css_class("label_tittle");
+                                lbl_past.add_css_class("label_tittle");
+                                lbl_v3.add_css_class("label_tittle");
+                                lbl_ing.add_css_class("label_tittle");
 
-        let view_switcher = ViewSwitcher::builder().stack(&view_stack).build();
+                                lbl_verb
+                                    .style_context()
+                                    .add_provider(&__provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        let header_bar = HeaderBar::builder().title_widget(&view_switcher).build();
+                                lbl_past
+                                    .style_context()
+                                    .add_provider(&__provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
+                                lbl_v3
+                                    .style_context()
+                                    .add_provider(&__provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        let menu = gio::Menu::new();
-        menu.append(Some("About"), Some("app.about"));
+                                lbl_ing
+                                    .style_context()
+                                    .add_provider(&__provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        // Crear acciones
-        let about_opt = gio::SimpleAction::new("about", None);
-        about_opt.connect_activate(|_, _| {
-            println!("About option");
-        });
+                                let compare: ChangeChar = ChangeChar::new();
 
-        app.add_action(&about_opt);
+                                let _verb_base = compare.get_change_name_for_char(
+                                    et_past.text().to_string(),
+                                    et_verb.text().to_string(),
+                                    '*',
+                                );
 
-        let button_menu = MenuButton::builder()
-            .icon_name("open-menu-symbolic")
-            .menu_model(&menu)
-            .build();
+                                let _verb_v3 = compare.get_change_name_for_char(
+                                    et_v3.text().to_string(),
+                                    et_past.text().to_string(),
+                                    '^',
+                                );
 
-        header_bar.pack_end(&button_menu);
+                                let _verb_ing = compare.get_change_name_for_char(
+                                    et_ing.text().to_string(),
+                                    et_verb.text().to_string(),
+                                    '*',
+                                );
 
-        let main_box = Box::builder()
-            .orientation(Orientation::Vertical)
-            .spacing(6)
-            .build();
+                                lbl_verb.set_label(&et_verb.text());
+                                lbl_past.set_label(&_verb_base);
+                                lbl_v3.set_label(&_verb_v3);
+                                lbl_ing.set_label(&_verb_ing);
 
-        main_box.append(&header_bar);
-        main_box.append(&view_stack);
+                                et_verb.set_text("");
+                                et_past.set_text("");
+                                et_v3.set_text("");
+                                et_ing.set_text("");
+                                _dialog.close();
+                            }
+                        }
+                    });
+                    btn_cancel.connect_clicked({
+                        let _dialog = dialog.clone();
+                        move |_| {
+                            _dialog.close();
+                        }
+                    });
+                    dialog.present(Some(&_app));
+                }
+            });
+            stack_view.connect_notify_local(Some("visible-child"), {
+                let btn = btn_add.clone();
+                move |stack, _| {
+                    if let Some(child) = stack.visible_child_name() {
+                        if child == "verb" {
+                            btn.set_visible(true); // show button  add for dialog
+                        } else {
+                            btn.set_visible(false); //hidden button add
+                        }
+                    }
+                }
+            });
 
-        window.set_content(Some(&main_box));
-        window.present();
+            let menu = gio::Menu::new();
+            menu.append(Some("About"), Some("app.about"));
+
+            let about_opt = gio::SimpleAction::new("about", None);
+            about_opt.connect_activate(|_, _| {
+                println!("About option");
+            });
+
+            app.add_action(&about_opt);
+
+            let button_menu: MenuButton = build.object("menu_option").unwrap();
+            button_menu.set_menu_model(Some(&menu));
+
+            let main_box: Box = build.object("bax_main").unwrap();
+
+            main_box.append(&view_stack);
+
+            window.present();
+        }
     });
 
     app.run();

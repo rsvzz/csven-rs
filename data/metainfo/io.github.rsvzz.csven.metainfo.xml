@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component type="desktop-application">
+  <id>io.github.rsvzz.csven</id>
+  <name translate="no">csven</name>
+  <summary>Order English words</summary>
+  <description>
+    <p>
+        CSVEN allows you to add an English word to mess it up and put it back together to learn how to write it through a game
+    </p>
+  </description>
+
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <launchable type="desktop-id">io.github.rsvzz.csven.desktop</launchable>
+  
+
+  <developer id="io.github.rsvzz">
+      <name>Ronald Sanchez</name>
+  </developer>
+  <provides>
+    <binary>csven</binary>
+  </provides>
+
+  <url type="homepage">https://github.com/rsvzz/csven</url>
+  <url type="bugtracker">https://github.com/rsvzz/csven.git</url>
+
+  <releases>
+  
+    <release version="0.1.19" date="2025-09-26">
+          <description translate="no">
+            <p>Changed:</p>
+            <ul>
+              <li>move option to header</li>
+            </ul>
+          </description>
+        </release>
+
+  <release version="0.1.18" date="2025-08-13">
+      <description translate="no">
+        <p>Changed:</p>
+        <ul>
+          <li>add Adwaita for interface</li>
+          <li>remove gtkmm-4.0 for c++</li>
+        </ul>
+      </description>
+    </release>
+
+  <release version="0.1.16" date="2025-07-21">
+      <description translate="no">
+        <p>Changed:</p>
+        <ul>
+          <li>add about</li>
+        </ul>
+      </description>
+    </release>
+
+  <release version="0.1.14" date="2025-07-10">
+      <description translate="no">
+        <p>Changed:</p>
+        <ul>
+          <li>Performance fixes</li>
+        </ul>
+      </description>
+    </release>
+
+  <release version="0.1.12" date="2025-06-24">
+      <description translate="no">
+        <p>Changed:</p>
+        <ul>
+          <li>add new option add drag and drop</li>
+        </ul>
+      </description>
+    </release>
+
+  <release version="0.1.10" date="2025-06-16">
+      <description translate="no">
+        <p>Changed:</p>
+        <ul>
+          <li>add libadwaita for interface</li>
+        </ul>
+      </description>
+    </release>
+
+  <release version="0.1.8" date="2025-06-07">
+      <description translate="no">
+        <p>Changed:</p>
+        <ul>
+          <li>the codicus was restructured and visual changes</li>
+        </ul>
+      </description>
+    </release>
+  
+  <release version="0.1.5" date="2025-05-22">
+      <description translate="no">
+        <p>Changed:</p>
+        <ul>
+          <li>Changed the interface.</li>
+        </ul>
+      </description>
+    </release>
+
+   <release version="0.1.1" date="2025-04-10">
+      <description translate="no">
+        <p>Changed:</p>
+        <ul>
+          <li>In this version, the option to compare verbs in their tenses was added.</li>
+        </ul>
+      </description>
+    </release>
+
+    <release version="0.0.7" date="2025-03-20">
+      <description translate="no">
+        <p>Changed:</p>
+        <ul>
+          <li>This version only allows you to spell one word</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
+ 
+   <screenshots>
+
+  <screenshot type="default">
+        <caption>Main window of csven light</caption>
+        <image type="source" width="800" height="800">https://raw.githubusercontent.com/rsvzz/csven/124a06b7c2be816ef8276c76bd6ba01f5acc2434/data/screenshot/sc_main_light.png</image>
+      </screenshot>
+
+   <screenshot>
+        <caption>Main window of csven dark</caption>
+        <image type="source" width="800" height="800">https://raw.githubusercontent.com/rsvzz/csven/124a06b7c2be816ef8276c76bd6ba01f5acc2434/data/screenshot/sc_main_dark.png</image>
+      </screenshot>
+
+  </screenshots>
+
+  <content_rating type="oars-1.1" />
+
+</component>

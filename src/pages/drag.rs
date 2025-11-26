@@ -3,8 +3,8 @@ use gtk::glib::random_int_range;
 use gtk::prelude::*;
 
 use gtk::{
-    Align, Box, Button, DragSource, DropTarget, Entry, EventController, GridView, NoSelection,
-    Orientation, SignalListItemFactory, glib,
+    Align, Box, Builder, Button, CssProvider, DragSource, DropTarget, Entry, EventController,
+    GridView, NoSelection, STYLE_PROVIDER_PRIORITY_APPLICATION, SignalListItemFactory, glib,
 };
 
 use gdk::ContentProvider;
@@ -18,58 +18,37 @@ pub struct Drag {
     p_box: Box,
     pub edit_word: Entry,
     pub btn_start: Button,
-    box_info: Box,
     gv_valid: GridView,
     pub name: String,
+    provider_css: CssProvider,
     grid_view: GridView,
 }
 
 impl Drag {
-    pub fn build() -> Self {
-        let box_p = Box::builder()
-            .orientation(Orientation::Vertical)
-            .spacing(0)
-            .build();
+    pub fn build(build: &Builder) -> Self {
+        let provider = CssProvider::new();
+        //provider.load_from_path("/usr/local/share/csven/styles/io.github.rsvzz.csven.css"); //release
+        provider.load_from_path("data/styles/io.github.rsvzz.csven.css"); //devmode
 
-        let box_word = Box::builder()
-            .orientation(Orientation::Horizontal)
-            .spacing(6)
-            .build();
+        let box_p: Box = build.object("pdragbox_main").unwrap();
+        let word_et: Entry = build.object("entry_drag_word").unwrap();
+        let start_btn: Button = build.object("btn_drag_start").unwrap();
+        start_btn.add_css_class("btn_reset");
+        start_btn
+            .style_context()
+            .add_provider(&provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        box_word.set_halign(Align::Center);
-
-        let word_et = Entry::builder()
-            .placeholder_text("type a word")
-            .max_length(40)
-            .build();
-
-        let start_btn = Button::builder().icon_name("view-refresh-symbolic").build();
-
-        box_word.append(&word_et);
-        box_word.append(&start_btn);
-
-        let grid_view_valid = GridView::builder()
-            .margin_top(10)
-            .halign(Align::Center)
-            .build();
-
-        let view_grid = GridView::builder()
-            .margin_top(10)
-            .halign(Align::Center)
-            .build();
-
-        box_p.append(&box_word);
-        box_p.append(&grid_view_valid);
-        box_p.append(&view_grid);
+        let grid_view_valid: GridView = build.object("gdrag_tittle").unwrap();
+        let view_grid = build.object("gv_verb").unwrap();
 
         let _name = String::from("");
         Drag {
             p_box: box_p,
             edit_word: word_et,
             btn_start: start_btn,
-            box_info: box_word,
             gv_valid: grid_view_valid,
             name: _name,
+            provider_css: provider.clone(),
             grid_view: view_grid,
         }
     }
@@ -95,7 +74,7 @@ impl Drag {
                 &self.grid_view,
                 &self.gv_valid,
                 &ItemGame::new(&c.to_string(), i as i8, true),
-                &self.btn_start
+                &self.btn_start,
             );
             store.append(&item);
         }
@@ -104,72 +83,85 @@ impl Drag {
 
         let factory = SignalListItemFactory::new();
 
-        factory.connect_setup(|_, list_item| {
-            let button = Button::builder().build();
-            list_item.set_child(Some(&button));
+        factory.connect_setup({
+            let _provider = self.provider_css.clone();
+            move |_, list_item| {
+                let button = Button::builder().build();
+
+                button.add_css_class("btn_tittle");
+                button
+                    .style_context()
+                    .add_provider(&_provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+                list_item.set_child(Some(&button));
+            }
         });
 
         factory.connect_bind(|_, list_item| {
-            let button = list_item.child().and_downcast::<Button>().unwrap();
-            let valid_grid = list_item.item().and_downcast::<ValidGridView>().unwrap();
-            let item = valid_grid.item_g();
+                let button = list_item.child().and_downcast::<Button>().unwrap();
+                let valid_grid = list_item.item().and_downcast::<ValidGridView>().unwrap();
+                let item = valid_grid.item_g();
 
-            button.set_label(&item.name());
+                button.set_label(&item.name());
 
-            item.bind_property("name", &button, "label")
-                .flags(glib::BindingFlags::SYNC_CREATE)
-                .build();
+                item.bind_property("name", &button, "label")
+                    .flags(glib::BindingFlags::SYNC_CREATE)
+                    .build();
 
-            item.bind_property("status", &button, "sensitive")
-                .flags(glib::BindingFlags::SYNC_CREATE)
-                .build();
+                item.bind_property("status", &button, "sensitive")
+                    .flags(glib::BindingFlags::SYNC_CREATE)
+                    .build();
 
-            let drop_target = DropTarget::new(ValidGridView::static_type(), gdk::DragAction::COPY);
-            drop_target.connect_drop({
-                let btn = button.clone(); //drop button
-                move |_, value, _, _| {
-                    if let Ok(value) = value.get::<ValidGridView>() {
-                        // 1 index equal valid
-                        let model_valid = value
-                            .gview_drop()
-                            .model()
-                            .and_downcast::<NoSelection>()
-                            .unwrap();
+                let drop_target =
+                    DropTarget::new(ValidGridView::static_type(), gdk::DragAction::COPY);
+                drop_target.connect_drop({
+                    let btn = button.clone(); //drop button
+                    move |_, value, _, _| {
+                        if let Ok(value) = value.get::<ValidGridView>() {
+                            // 1 index equal valid
+                            let model_valid = value
+                                .gview_drop()
+                                .model()
+                                .and_downcast::<NoSelection>()
+                                .unwrap();
 
-                        let mut item_game: Option<ItemGame> = None;
-                        //let mut status_valid = false;
+                            let mut item_game: Option<ItemGame> = None;
+                            //let mut status_valid = false;
 
-                        for i in 0..model_valid.n_items() {
-                            let item_val =
-                                model_valid.item(i).and_downcast::<ValidGridView>().unwrap();
-                            let _item_g = item_val.item_g();
+                            for i in 0..model_valid.n_items() {
+                                let item_val =
+                                    model_valid.item(i).and_downcast::<ValidGridView>().unwrap();
+                                let _item_g = item_val.item_g();
 
-                            if _item_g.status() == true {
-                                item_game = Some(_item_g);
-                                break;
-                            }
-                        }
-
-                        if item_game != None {
-                            let item_arrive = value.item_g();
-                            let cp_item = item_game.clone().unwrap();
-                             //println!("actual : {}, llega {}", cp_item.name(), item_arrive.name());
-                            if item_arrive.name() == cp_item.name()  && btn.label().unwrap() == item_arrive.name(){
-                                cp_item.set_status(false);
-                                item_arrive.set_status(false);
-                                
-                                if cp_item.idex() as u32 == (model_valid.n_items() - 1){
-                                    value.btn_reset().set_sensitive(true);
+                                if _item_g.status() == true {
+                                    item_game = Some(_item_g);
+                                    break;
                                 }
                             }
-                        }
 
-                        return true;
+                            if item_game != None {
+                                let item_arrive = value.item_g();
+                                let cp_item = item_game.clone().unwrap();
+                                //println!("actual : {}, llega {}", cp_item.name(), item_arrive.name());
+                                if item_arrive.name() == cp_item.name()
+                                    && btn.label().unwrap() == item_arrive.name()
+                                {
+                                    cp_item.set_status(false);
+                                    item_arrive.set_status(false);
+
+                                    //end word
+                                    if cp_item.idex() as u32 == (model_valid.n_items() - 1) {
+                                        value.btn_reset().set_sensitive(true);
+                                    }
+                                }
+                            }
+
+                            return true;
+                        }
+                        false
                     }
-                    false
-                }
-            });
-            button.add_controller(drop_target.upcast::<EventController>());
+                });
+                button.add_controller(drop_target.upcast::<EventController>());
         });
 
         self.gv_valid.set_factory(Some(&factory));
@@ -195,7 +187,7 @@ impl Drag {
                 &self.grid_view,
                 &self.gv_valid,
                 &ItemGame::new(&c_item.to_string(), idex, true),
-                &self.btn_start
+                &self.btn_start,
             );
             store_drag.append(&item);
             idex += 1;
@@ -214,27 +206,33 @@ impl Drag {
             list_item.set_child(Some(&button));
         });
 
-        factory_drag.connect_bind(|_, list_item| {
-            let button = list_item.child().and_downcast::<Button>().unwrap();
-            let valid_grid = list_item.item().and_downcast::<ValidGridView>().unwrap();
-            let item = valid_grid.item_g();
+        factory_drag.connect_bind({
+            let _provider = self.provider_css.clone();
+            move |_, list_item| {
+                let button = list_item.child().and_downcast::<Button>().unwrap();
+                let valid_grid = list_item.item().and_downcast::<ValidGridView>().unwrap();
+                let item = valid_grid.item_g();
+                button.add_css_class("btn_ramdon");
+                button
+                    .style_context()
+                    .add_provider(&_provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
+                button.set_label(&item.name());
 
-            button.set_label(&item.name());
+                item.bind_property("name", &button, "label")
+                    .flags(glib::BindingFlags::SYNC_CREATE)
+                    .build();
 
-            item.bind_property("name", &button, "label")
-                .flags(glib::BindingFlags::SYNC_CREATE)
-                .build();
+                item.bind_property("status", &button, "sensitive")
+                    .flags(glib::BindingFlags::SYNC_CREATE)
+                    .build();
 
-            item.bind_property("status", &button, "sensitive")
-                .flags(glib::BindingFlags::SYNC_CREATE)
-                .build();
-
-            // Drag source
-            let drag_source = DragSource::new();
-            drag_source.set_actions(gdk::DragAction::COPY);
-            let provider = ContentProvider::for_value(&valid_grid.clone().to_value());
-            drag_source.set_content(Some(&provider));
-            button.add_controller(drag_source.upcast::<EventController>());
+                // Drag source
+                let drag_source = DragSource::new();
+                drag_source.set_actions(gdk::DragAction::COPY);
+                let provider = ContentProvider::for_value(&valid_grid.clone().to_value());
+                drag_source.set_content(Some(&provider));
+                button.add_controller(drag_source.upcast::<EventController>());
+            }
         });
 
         self.grid_view.set_factory(Some(&factory_drag));

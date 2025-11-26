@@ -9,3 +9,6 @@
     ninja
     ninja install
 
+### Uninstall
+    ninja uninstall
+

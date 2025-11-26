@@ -1,0 +1,35 @@
+.btn_reset {
+    background-color: green;
+    font-weight: bold;
+    font-size: medium;
+    color: white; 
+}
+
+.btn_ramdon {
+    background-color: rgb(51, 126, 51);
+    font-weight: bold;
+    font-size: medium;
+    color: white;
+    border: 1px solid rgb(163, 172, 163);
+    border-radius: 5px;
+}
+
+.btn_tittle:disabled{
+    background-color: rgb(22, 14, 136);
+    font-weight: bold;
+    font-size: medium;
+    color: white;
+    border: 1px solid rgb(28, 64, 163);
+    border-radius: 5px;
+    opacity: 1;
+}
+
+.btn_ramdon:hover{
+    background-color: #21d309;
+}
+
+.label_tittle{
+    font-size: 50px;
+    font-weight: bold;
+}
+
