@@ -2,7 +2,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use adw::prelude::*;
-use adw::{Application, ApplicationWindow, Dialog, EntryRow, ViewStack};
+use adw::{AboutDialog, Application, ApplicationWindow, Dialog, EntryRow, ViewStack};
 
 use gtk::{
     Box, Builder, Button, CssProvider, Label, MenuButton, STYLE_PROVIDER_PRIORITY_APPLICATION, gio,
@@ -17,8 +17,8 @@ use pages::{Drag, Game};
 fn main() {
     let _ = gtk::init(); //need CssProvider
     let provider = CssProvider::new();
-    //provider.load_from_path("/usr/local/share/csven/styles/io.github.rsvzz.csven.css"); //release
-    provider.load_from_path("data/styles/io.github.rsvzz.csven.css"); //devmode
+    provider.load_from_path("/usr/local/share/csven/styles/io.github.rsvzz.csven.css"); //release
+    //provider.load_from_path("data/styles/io.github.rsvzz.csven.css"); //devmode
 
     let app = Application::builder()
         .application_id("io.github.rsvzz.csven")
@@ -202,8 +202,15 @@ fn main() {
             menu.append(Some("About"), Some("app.about"));
 
             let about_opt = gio::SimpleAction::new("about", None);
-            about_opt.connect_activate(|_, _| {
-                println!("About option");
+
+            about_opt.connect_activate({
+                let _win = window.clone();
+                move |_, _| {
+                    let about_ui = Builder::from_file("/usr/local/share/csven/ui/about.ui");
+                    let _dialog: AboutDialog = about_ui.object("about_dialog").unwrap();
+
+                    _dialog.present(Some(&_win));
+                }
             });
 
             app.add_action(&about_opt);

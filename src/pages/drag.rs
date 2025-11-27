@@ -27,8 +27,8 @@ pub struct Drag {
 impl Drag {
     pub fn build(build: &Builder) -> Self {
         let provider = CssProvider::new();
-        //provider.load_from_path("/usr/local/share/csven/styles/io.github.rsvzz.csven.css"); //release
-        provider.load_from_path("data/styles/io.github.rsvzz.csven.css"); //devmode
+        provider.load_from_path("/usr/local/share/csven/styles/io.github.rsvzz.csven.css"); //release
+        //provider.load_from_path("data/styles/io.github.rsvzz.csven.css"); //devmode
 
         let box_p: Box = build.object("pdragbox_main").unwrap();
         let word_et: Entry = build.object("entry_drag_word").unwrap();
@@ -41,7 +41,7 @@ impl Drag {
         let grid_view_valid: GridView = build.object("gdrag_tittle").unwrap();
         let view_grid = build.object("gv_verb").unwrap();
 
-        let _name = String::from("");
+        let _name = String::new();
         Drag {
             p_box: box_p,
             edit_word: word_et,

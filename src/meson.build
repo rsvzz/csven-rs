@@ -12,7 +12,8 @@ install_data('../data/desktop/io.github.rsvzz.csven.desktop', install_dir: get_o
 
 icons_file = files(
    '../data/ui/csven.ui',
-   '../data/ui/verb.ui'
+   '../data/ui/verb.ui',
+   '../data/ui/about.ui'
 )
 install_data(icons_file, install_dir: get_option('prefix') / 'share/csven/ui')
 

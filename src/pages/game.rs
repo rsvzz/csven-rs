@@ -24,8 +24,8 @@ pub struct Game {
 impl Game {
     pub fn new(build: &Builder) -> Self {
         let provider = CssProvider::new();
-        //provider.load_from_path("/usr/local/share/csven/styles/io.github.rsvzz.csven.css"); //release
-        provider.load_from_path("data/styles/io.github.rsvzz.csven.css"); //devmode
+        provider.load_from_path("/usr/local/share/csven/styles/io.github.rsvzz.csven.css"); //release
+        //provider.load_from_path("data/styles/io.github.rsvzz.csven.css"); //devmode
 
         let p_box: Box = build.object("box_game_main").unwrap();
         let add_word: Entry = build.object("entry_game_word").unwrap();
