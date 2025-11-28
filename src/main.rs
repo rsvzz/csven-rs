@@ -8,6 +8,7 @@ use gtk::{
     Box, Builder, Button, CssProvider, Label, MenuButton, STYLE_PROVIDER_PRIORITY_APPLICATION, gio,
 };
 
+use  std::{env};
 mod model;
 mod pages;
 
@@ -17,7 +18,10 @@ use pages::{Drag, Game};
 fn main() {
     let _ = gtk::init(); //need CssProvider
     let provider = CssProvider::new();
-    provider.load_from_path("/usr/local/share/csven/styles/io.github.rsvzz.csven.css"); //release
+    let path = env::current_exe()
+        .expect("No path exe");
+
+    provider.load_from_path(path.parent().unwrap().join("../share/csven/styles/io.github.rsvzz.csven.css").to_string_lossy().to_string()); //release
     //provider.load_from_path("data/styles/io.github.rsvzz.csven.css"); //devmode
 
     let app = Application::builder()
@@ -26,9 +30,10 @@ fn main() {
 
     app.connect_activate({
         let _provider = provider.clone();
+        let dir = path.clone();
         move |app| {
             // Crear la ventana principal
-            let build = Builder::from_file("/usr/local/share/csven/ui/csven.ui");
+            let build = Builder::from_file(dir.parent().unwrap().join("../share/csven/ui/csven.ui").to_string_lossy().to_string());
             let window: ApplicationWindow = build.object("app").unwrap();
             window.set_default_width(700);
             window.set_default_height(600);
@@ -92,7 +97,7 @@ fn main() {
             let stack_view: ViewStack = build.object("view_stack").unwrap();
 
             //let verb_ui: Builder = Builder::from_file("/usr/local/share/csven/ui/verb.ui"); //release
-            let verb_ui: Builder = Builder::from_file("/usr/local/share/csven/ui/verb.ui"); //devmode
+            let verb_ui: Builder = Builder::from_file(dir.parent().unwrap().join("../share/csven/ui/verb.ui").to_string_lossy().to_string()); //devmode
             btn_add.connect_clicked({
                 let _app = window.clone();
                 let _verb = verb_ui.clone();
@@ -205,8 +210,9 @@ fn main() {
 
             about_opt.connect_activate({
                 let _win = window.clone();
+                let _dir = dir.clone();
                 move |_, _| {
-                    let about_ui = Builder::from_file("/usr/local/share/csven/ui/about.ui");
+                    let about_ui = Builder::from_file(_dir.parent().unwrap().join("../share/csven/ui/about.ui").to_string_lossy().to_string());
                     let _dialog: AboutDialog = about_ui.object("about_dialog").unwrap();
 
                     _dialog.present(Some(&_win));

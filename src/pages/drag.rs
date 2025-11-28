@@ -12,7 +12,7 @@ use gdk::ContentProvider;
 use crate::model::{ItemGame, OptValid, ValidGridView};
 use crate::pages::ViewPage;
 use gtk::gio::{ListModel, ListStore};
-
+use std::{env};
 #[derive(Clone)]
 pub struct Drag {
     p_box: Box,
@@ -27,7 +27,15 @@ pub struct Drag {
 impl Drag {
     pub fn build(build: &Builder) -> Self {
         let provider = CssProvider::new();
-        provider.load_from_path("/usr/local/share/csven/styles/io.github.rsvzz.csven.css"); //release
+       let path = env::current_exe().expect("No path exe");
+
+        provider.load_from_path(
+            path.parent()
+                .unwrap()
+                .join("../share/csven/styles/io.github.rsvzz.csven.css")
+                .to_string_lossy()
+                .to_string(),
+        ); //release
         //provider.load_from_path("data/styles/io.github.rsvzz.csven.css"); //devmode
 
         let box_p: Box = build.object("pdragbox_main").unwrap();
