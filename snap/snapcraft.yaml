@@ -1,0 +1,57 @@
+name: csven
+version: '0.1.20'
+summary: Order English words
+description: CSVEN allows you to add an English word to mess it up and put it back together to learn how to write it through a game
+base: core24
+confinement: strict
+grade: stable
+license: GPL-3.0-or-later
+compression: lzo
+
+platforms: 
+  amd64:
+  arm64:
+  armhf:
+
+apps:
+  csven:
+    command: bin/csven
+    desktop: share/applications/io.github.rsvzz.csven.desktop
+    extensions: [gnome]
+    common-id: io.github.rsvzz.csven
+    slots: [csven-dbs]
+
+    plugs: 
+      - x11
+      - wayland
+      - desktop-legacy
+      - desktop
+
+parts:
+  rust:
+    plugin: rust
+    source: .
+    rust-channel: "1.91.1"
+    override-build: ""
+    override-prime: ""
+
+  csven:
+    plugin: meson
+    source: https://github.com/rsvzz/csven-rs.git
+    source-tag: v$SNAPCRAFT_PROJECT_VERSION
+    meson-parameters:
+      - --prefix=/
+      - --buildtype=release
+    after: [rust]
+    build-environment:
+      - C_INCLUDE_PATH: ${SNAPCRAFT_STAGE}/include
+      - LIBRARY_PATH: ${SNAPCRAFT_STAGE}/lib/x86_64-linux-gnu
+    build-packages:
+      - meson
+      - cargo
+
+slots:
+  csven-dbs:
+    interface: dbus
+    bus: session
+    name: io.github.rsvzz.csven

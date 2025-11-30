@@ -2,3 +2,7 @@
 /build
 /builddir
 /.vscode
+
+*.snap
+*.flatpak
+*.exe
