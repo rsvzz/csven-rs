@@ -20,7 +20,6 @@ apps:
     extensions: [gnome]
     common-id: io.github.rsvzz.csven
     slots: [csven-dbs]
-
     plugs: 
       - x11
       - wayland

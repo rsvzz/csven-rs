@@ -6,7 +6,7 @@ adw_dep = dependency('libadwaita-1', required : true)
 cargo = find_program('cargo', required: true)
 
 install_data('../data/styles/io.github.rsvzz.csven.css', install_dir: get_option('prefix') / 'share/csven/styles')
-install_data('../data/metainfo/io.github.rsvzz.csven.metainfo.xml', install_dir: get_option('prefix') / 'share/csven/metainfo')
+install_data('../data/metainfo/io.github.rsvzz.csven.metainfo.xml', install_dir: get_option('prefix') / 'share/metainfo')
 install_data('../data/icons/io.github.rsvzz.csven.svg', install_dir: get_option('prefix') / 'share/icons/hicolor/scalable/apps')
 install_data('../data/desktop/io.github.rsvzz.csven.desktop', install_dir: get_option('prefix') /'share/applications')
 

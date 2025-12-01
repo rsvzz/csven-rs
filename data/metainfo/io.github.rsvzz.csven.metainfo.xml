@@ -26,6 +26,16 @@
   <url type="bugtracker">https://github.com/rsvzz/csven.git</url>
 
   <releases>
+
+     <release version="0.1.21" date="2025-12-01">
+          <description translate="no">
+            <p>Changed:</p>
+            <ul>
+              <li>rust version</li>
+              <li>memory safe</li>
+            </ul>
+          </description>
+        </release>
   
     <release version="0.1.19" date="2025-09-26">
           <description translate="no">
