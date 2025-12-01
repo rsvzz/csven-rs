@@ -133,12 +133,12 @@
 
   <screenshot type="default">
         <caption>Main window of csven light</caption>
-        <image type="source" width="800" height="800">https://raw.githubusercontent.com/rsvzz/csven/124a06b7c2be816ef8276c76bd6ba01f5acc2434/data/screenshot/sc_main_light.png</image>
+        <image type="source" width="800" height="800">https://raw.githubusercontent.com/rsvzz/csven-rs/f6ad81b58c04acb178811d37d57e304d2f69cbdf/data/screenshot/light.png</image>
       </screenshot>
 
    <screenshot>
         <caption>Main window of csven dark</caption>
-        <image type="source" width="800" height="800">https://raw.githubusercontent.com/rsvzz/csven/124a06b7c2be816ef8276c76bd6ba01f5acc2434/data/screenshot/sc_main_dark.png</image>
+        <image type="source" width="800" height="800">https://raw.githubusercontent.com/rsvzz/csven-rs/f6ad81b58c04acb178811d37d57e304d2f69cbdf/data/screenshot/dark.png</image>
       </screenshot>
 
   </screenshots>
