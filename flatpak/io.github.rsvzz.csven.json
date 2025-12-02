@@ -1,0 +1,37 @@
+{
+  "id": "io.github.rsvzz.csven",
+  "runtime": "org.gnome.Platform",
+  "runtime-version": "49",
+  "sdk": "org.gnome.Sdk",
+  "command": "csven",
+  "sdk-extensions": [
+    "org.freedesktop.Sdk.Extension.rust-stable"
+  ],
+  "build-options": {
+    "append-path": "/usr/lib/sdk/rust-stable/bin",
+    "env": {
+      "HOME_CARGO": "/run/build/csven/cargo"
+    }
+  },
+  "finish-args": [
+    "--share=ipc",
+    "--device=dri",
+    "--socket=fallback-x11",
+    "--socket=wayland"
+  ],
+  "cleanup": [
+    "/include"
+  ],
+  "modules": [
+    {
+      "name": "csven",
+      "buildsystem": "meson",
+      "sources": [
+        {
+          "type": "dir",
+          "path": ".."
+        }
+      ]
+    }
+  ]
+}

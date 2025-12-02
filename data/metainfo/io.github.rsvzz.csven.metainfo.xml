@@ -22,12 +22,12 @@
     <binary>csven</binary>
   </provides>
 
-  <url type="homepage">https://github.com/rsvzz/csven</url>
-  <url type="bugtracker">https://github.com/rsvzz/csven.git</url>
+  <url type="homepage">https://github.com/rsvzz/csven-rs</url>
+  <url type="bugtracker">https://github.com/rsvzz/csven-rs.git</url>
 
   <releases>
 
-     <release version="0.1.21" date="2025-12-01">
+     <release version="0.1.20" date="2025-12-02">
           <description translate="no">
             <p>Changed:</p>
             <ul>
