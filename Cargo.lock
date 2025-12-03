@@ -49,7 +49,7 @@ dependencies = [
 
 [[package]]
 name = "csven"
-version = "0.1.20"
+version = "0.1.24"
 dependencies = [
  "gtk4",
  "libadwaita",
@@ -332,9 +332,9 @@ dependencies = [
 
 [[package]]
 name = "gtk4"
-version = "0.10.2"
+version = "0.10.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "58ea71795b91a0725b0e926e72e3d209d920ce60166e3a8f9f4dd46f287fee87"
+checksum = "acb21d53cfc6f7bfaf43549731c43b67ca47d87348d81c8cfc4dcdd44828e1a4"
 dependencies = [
  "cairo-rs",
  "field-offset",

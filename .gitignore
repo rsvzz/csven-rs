@@ -2,6 +2,8 @@
 /build
 /builddir
 /.vscode
+/.cargo
+/vendor
 
 *.snap
 *.flatpak

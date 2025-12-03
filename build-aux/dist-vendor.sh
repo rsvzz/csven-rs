@@ -1,5 +1,5 @@
 #!/bin/sh
-set -e # error download
+set -eu # error download
 export DIST="$1"
 export SOURCE_ROOT="$2"
 
