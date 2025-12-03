@@ -17,6 +17,12 @@ icons_file = files(
 )
 install_data(icons_file, install_dir: get_option('prefix') / 'share/csven/ui')
 
+meson.add_dist_script(
+  '../build-aux/dist-vendor.sh',
+  meson.project_build_root() / 'meson-dist' / meson.project_name() + '-' + meson.project_version(),
+  meson.project_source_root()
+)
+
 custom_target('csven',
   output: 'csven',
   build_by_default: true,
