@@ -39,7 +39,7 @@ impl Game {
         let p_box: Box = build.object("box_game_main").unwrap();
         let add_word: Entry = build.object("entry_game_word").unwrap();
         let btn_start: Button = build.object("btn_game_start").unwrap();
-
+        
         btn_start.add_css_class("btn_reset");
         btn_start
             .style_context()

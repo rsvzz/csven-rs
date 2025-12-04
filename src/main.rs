@@ -8,7 +8,7 @@ use gtk::{
     Box, Builder, Button, CssProvider, Label, MenuButton, STYLE_PROVIDER_PRIORITY_APPLICATION, gio,
 };
 
-use  std::{env};
+use std::env;
 mod model;
 mod pages;
 
@@ -18,10 +18,15 @@ use pages::{Drag, Game};
 fn main() {
     let _ = gtk::init(); //need CssProvider
     let provider = CssProvider::new();
-    let path = env::current_exe()
-        .expect("No path exe");
+    let path = env::current_exe().expect("No path exe");
 
-    provider.load_from_path(path.parent().unwrap().join("../share/csven/styles/io.github.rsvzz.csven.css").to_string_lossy().to_string()); //release
+    provider.load_from_path(
+        path.parent()
+            .unwrap()
+            .join("../share/csven/styles/io.github.rsvzz.csven.css")
+            .to_string_lossy()
+            .to_string(),
+    ); //release
     //provider.load_from_path("data/styles/io.github.rsvzz.csven.css"); //devmode
 
     let app = Application::builder()
@@ -33,7 +38,13 @@ fn main() {
         let dir = path.clone();
         move |app| {
             // Crear la ventana principal
-            let build = Builder::from_file(dir.parent().unwrap().join("../share/csven/ui/csven.ui").to_string_lossy().to_string());
+            let build = Builder::from_file(
+                dir.parent()
+                    .unwrap()
+                    .join("../share/csven/ui/csven.ui")
+                    .to_string_lossy()
+                    .to_string(),
+            );
             let window: ApplicationWindow = build.object("app").unwrap();
             window.set_default_width(700);
             window.set_default_height(600);
@@ -42,6 +53,24 @@ fn main() {
             let view_stack: ViewStack = build.object("view_stack").unwrap();
 
             let p_game = Rc::new(RefCell::new(Game::new(&build)));
+
+            //enter edit word.
+            p_game.borrow_mut().add_word.connect_activate({
+                let game = Rc::clone(&p_game);
+                move |entry| {
+                    let mut str = entry.text();
+                    if str.len() == 0 {
+                        str = game.borrow().name.to_string().into();
+                    }
+
+                    if str.len() != 0 {
+                        game.borrow().btn_start.set_sensitive(false);
+                        game.borrow_mut().set_grid_view_valid(&str);
+                        game.borrow_mut().set_name_game_for_gridview(&str);
+                        game.borrow().add_word.set_text("");
+                    }
+                }
+            });
 
             p_game.borrow_mut().btn_start.connect_clicked({
                 let game = Rc::clone(&p_game);
@@ -75,6 +104,22 @@ fn main() {
                     drag.borrow().on_change_entry_game();
                 }
             });
+            p_drag.borrow_mut().edit_word.connect_activate({
+                let drag = Rc::clone(&p_drag);
+                move |_| {
+                    let mut str = drag.borrow().edit_word.text();
+
+                    if str.len() == 0 {
+                        str = drag.borrow().name.to_string().into();
+                    }
+
+                    if str.len() != 0 {
+                        drag.borrow().btn_start.set_sensitive(false);
+                        drag.borrow_mut().set_grid_view_valid(&str);
+                        drag.borrow().edit_word.set_text("");
+                    }
+                }
+            });
 
             p_drag.borrow_mut().btn_start.connect_clicked({
                 let drag = Rc::clone(&p_drag);
@@ -97,7 +142,13 @@ fn main() {
             let stack_view: ViewStack = build.object("view_stack").unwrap();
 
             //let verb_ui: Builder = Builder::from_file("/usr/local/share/csven/ui/verb.ui"); //release
-            let verb_ui: Builder = Builder::from_file(dir.parent().unwrap().join("../share/csven/ui/verb.ui").to_string_lossy().to_string()); //devmode
+            let verb_ui: Builder = Builder::from_file(
+                dir.parent()
+                    .unwrap()
+                    .join("../share/csven/ui/verb.ui")
+                    .to_string_lossy()
+                    .to_string(),
+            ); //devmode
             btn_add.connect_clicked({
                 let _app = window.clone();
                 let _verb = verb_ui.clone();
@@ -212,7 +263,13 @@ fn main() {
                 let _win = window.clone();
                 let _dir = dir.clone();
                 move |_, _| {
-                    let about_ui = Builder::from_file(_dir.parent().unwrap().join("../share/csven/ui/about.ui").to_string_lossy().to_string());
+                    let about_ui = Builder::from_file(
+                        _dir.parent()
+                            .unwrap()
+                            .join("../share/csven/ui/about.ui")
+                            .to_string_lossy()
+                            .to_string(),
+                    );
                     let _dialog: AboutDialog = about_ui.object("about_dialog").unwrap();
 
                     _dialog.present(Some(&_win));

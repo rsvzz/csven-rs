@@ -26,6 +26,14 @@
   <url type="bugtracker">https://github.com/rsvzz/csven-rs.git</url>
 
   <releases>
+      <release version="0.1.25" date="2025-12-04">
+          <description translate="no">
+            <p>Changed:</p>
+            <ul>
+              <li>fix enter type in option game and drag</li>
+            </ul>
+          </description>
+        </release>
 
      <release version="0.1.24" date="2025-12-03">
           <description translate="no">
