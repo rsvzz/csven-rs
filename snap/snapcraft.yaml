@@ -1,5 +1,5 @@
 name: csven
-version: '0.1.25'
+version: '0.1.26'
 summary: Order English words
 description: CSVEN allows you to add an English word to mess it up and put it back together to learn how to write it through a game
 base: core24
@@ -48,6 +48,10 @@ parts:
     build-packages:
       - meson
       - cargo
+    override-build: |
+      snapcraftctl build
+      rm -r ${SNAPCRAFT_PART_INSTALL}/share/applications/io.github.rsvzz.csven.desktop
+      cp -v ${SNAPCRAFT_PROJECT_DIR}/data/desktop/io.github.rsvzz.csven-snap.desktop ${SNAPCRAFT_PART_INSTALL}/share/applications/io.github.rsvzz.csven.desktop
 
 slots:
   csven-dbs:
