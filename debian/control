@@ -1,0 +1,12 @@
+Source: csven
+Section: base
+Priority: optional
+Maintainer: rsvzz <https://github.com/rsvzz/csven-rs/issues>
+Build-Depends: debhelper-compat (= 13), meson, ninja-build, pkg-config, cargo, rustc, libgtk-4-dev, libadwaita-1-dev
+Standards-Version: 4.5.0
+Homepage: https://github.com/rsvzz/csven-rs
+
+Package: csven
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}, libgtk-4-1, libadwaita-1-0
+Description: CSVEN allows you to add an English word to mess it up and put it back together to learn how to write it through a game
