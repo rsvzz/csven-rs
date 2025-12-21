@@ -7,6 +7,6 @@ Standards-Version: 4.5.0
 Homepage: https://github.com/rsvzz/csven-rs
 
 Package: csven
-Architecture: amd64
+Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libgtk-4-1, libadwaita-1-0
 Description: CSVEN allows you to add an English word to mess it up and put it back together to learn how to write it through a game
