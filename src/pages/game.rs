@@ -1,14 +1,16 @@
 use crate::model::ItemGame;
 use crate::pages::ViewPage;
-use gtk::gio::prelude::*;
-use gtk::gio::{ListModel, ListStore};
-use gtk::glib::random_int_range;
+use adw::prelude::*;
 
-use gtk::{
+use gtk::{ prelude::*,
     Align, Box, Builder, Button, CssProvider, Entry, GridView, NoSelection,
     STYLE_PROVIDER_PRIORITY_APPLICATION, SignalListItemFactory,
 };
-use gtk::{glib, prelude::*};
+
+use gtk::gio::{ListModel, ListStore};
+use gtk::glib::{random_int_range, BindingFlags};
+
+use gtk::glib;
 use std::{env};
 
 #[derive(Clone)]
@@ -62,7 +64,8 @@ impl Game {
 
         factory.connect_setup({
             let _provider = provider.clone();
-            move |_, list_item| {
+            move |_, obj| {
+                let list_item = obj.downcast_ref::<gtk::ListItem>().unwrap();
                 let button = Button::builder()
                     .width_request(40)
                     .height_request(40)
@@ -78,7 +81,8 @@ impl Game {
 
         factory.connect_bind({
             let btn_start_cl = btn_start.clone();
-            move |_, list_item| {
+            move |_, obj| {
+                let list_item = obj.downcast_ref::<gtk::ListItem>().unwrap();
                 let button = list_item.child().and_downcast::<Button>().unwrap();
                 let item = list_item.item().and_downcast::<ItemGame>().unwrap();
                 let name = item.name();
@@ -164,7 +168,8 @@ impl Game {
 
         factory.connect_setup({
             let _provider = self.provider_css.clone();
-            move |_, list_item| {
+            move |_, obj| {
+                let list_item = obj.downcast_ref::<gtk::ListItem>().unwrap();
                 let button = Button::builder()
                     .width_request(40)
                     .height_request(40)
@@ -179,18 +184,20 @@ impl Game {
             }
         });
 
-        factory.connect_bind(|_, list_item| {
+        factory.connect_bind(|_, obj| {
+            let list_item = obj.downcast_ref::<gtk::ListItem>().unwrap();
+
             let button = list_item.child().and_downcast::<Button>().unwrap();
             let item = list_item.item().and_downcast::<ItemGame>().unwrap();
 
             button.set_label(&item.name());
 
             item.bind_property("name", &button, "label")
-                .flags(glib::BindingFlags::SYNC_CREATE)
+                .flags(BindingFlags::SYNC_CREATE)
                 .build();
 
             item.bind_property("status", &button, "sensitive")
-                .flags(glib::BindingFlags::SYNC_CREATE)
+                .flags(BindingFlags::SYNC_CREATE)
                 .build();
         });
 

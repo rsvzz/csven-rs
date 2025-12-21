@@ -1,5 +1,5 @@
-use adw::EntryRow;
 use adw::prelude::*;
+use adw::{EntryRow};
 use gtk::{Label, Orientation, Align, Box, Builder,};
 
 use crate::pages::ViewPage;
@@ -41,7 +41,7 @@ pub struct Verb {
 }
 
 impl Verb {
-    pub fn build(build: &Builder) -> Self {
+    pub fn build(_build: &Builder) -> Self {
 
         let box_p = Box::builder()
             .orientation(Orientation::Vertical)

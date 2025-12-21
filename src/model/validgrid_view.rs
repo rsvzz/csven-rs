@@ -1,6 +1,7 @@
+use gtk::glib;
 use glib::prelude::*;
 use glib::{Object, Properties};
-use gtk::{Button, GridView, glib, subclass::prelude::*};
+use gtk::{Button, GridView, subclass::prelude::*};
 use std::cell::RefCell;
 
 use crate::model::ItemGame;

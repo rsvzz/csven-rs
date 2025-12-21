@@ -1,6 +1,7 @@
+use gtk::glib;
 use glib::prelude::*;
 use glib::{Object, Properties};
-use gtk::{GridView, glib, subclass::prelude::*};
+use gtk::{GridView, subclass::prelude::*};
 use std::cell::RefCell;
 
 glib::wrapper! {

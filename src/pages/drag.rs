@@ -93,7 +93,8 @@ impl Drag {
 
         factory.connect_setup({
             let _provider = self.provider_css.clone();
-            move |_, list_item| {
+            move |_, obj| {
+                let list_item = obj.downcast_ref::<gtk::ListItem>().unwrap();
                 let button = Button::builder().build();
 
                 button.add_css_class("btn_tittle");
@@ -105,7 +106,8 @@ impl Drag {
             }
         });
 
-        factory.connect_bind(|_, list_item| {
+        factory.connect_bind(|_, obj| {
+            let list_item = obj.downcast_ref::<gtk::ListItem>().unwrap();
                 let button = list_item.child().and_downcast::<Button>().unwrap();
                 let valid_grid = list_item.item().and_downcast::<ValidGridView>().unwrap();
                 let item = valid_grid.item_g();
@@ -209,14 +211,16 @@ impl Drag {
 
         let factory_drag = SignalListItemFactory::new();
 
-        factory_drag.connect_setup(|_, list_item| {
+        factory_drag.connect_setup(|_, obj| {
+            let list_item = obj.downcast_ref::<gtk::ListItem>().unwrap();
             let button = Button::builder().build();
             list_item.set_child(Some(&button));
         });
 
         factory_drag.connect_bind({
             let _provider = self.provider_css.clone();
-            move |_, list_item| {
+            move |_, obj| {
+                let list_item = obj.downcast_ref::<gtk::ListItem>().unwrap();
                 let button = list_item.child().and_downcast::<Button>().unwrap();
                 let valid_grid = list_item.item().and_downcast::<ValidGridView>().unwrap();
                 let item = valid_grid.item_g();

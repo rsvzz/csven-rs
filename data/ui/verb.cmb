@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
-<!-- Created with Cambalache 0.96.1 -->
+<!-- Created with Cambalache 0.96.3 -->
 <cambalache-project version="0.96.0" target_tk="gtk-4.0">
-  <ui filename="verb.ui" sha256="a3970d6fa7140ed79b98641b1a32b41068336e741bce4c8a6e380ab4fbf81a52"/>
+  <ui filename="verb.ui" sha256="46606266331a5af73f251574e012a4d6412d79b4765669b4699df9dbb08def8f"/>
 </cambalache-project>
