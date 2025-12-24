@@ -1,5 +1,5 @@
 Source: csven
-Section: base
+Section: utils
 Priority: optional
 Maintainer: rsvzz <ronald_soft88@outlook.com>
 Build-Depends: debhelper-compat (= 13), meson, ninja-build, pkg-config, cargo-1.85, rustc-1.85, libgtk-4-dev, libadwaita-1-dev
