@@ -30,8 +30,7 @@ parts:
 
   csven:
     plugin: meson
-    source: https://github.com/rsvzz/csven-rs.git
-    source-tag: v$SNAPCRAFT_PROJECT_VERSION
+    source: https://github.com/rsvzz/csven-rs/releases/download/v0.1.27/csven_v0.1.27.tar.xz
     meson-parameters:
       - --prefix=/
       - --buildtype=release
