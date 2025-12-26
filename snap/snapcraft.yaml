@@ -42,8 +42,11 @@ parts:
       - meson
       - rustc-1.85
       - cargo-1.85
+    override-pull: | 
+     snapcraftctl pull 
+     cp -rv ${SNAPCRAFT_PROJECT_DIR}/vendor ${SNAPCRAFT_PART_BUILD}/vendor
+     cp -rv ${SNAPCRAFT_PROJECT_DIR}/.cargo ${SNAPCRAFT_PART_BUILD}/.cargo
     override-build: |
-      cp -rv ${SNAPCRAFT_PROJECT_DIR}/vendor ${SNAPCRAFT_PART_BUILD}/vendor
       snapcraftctl build
       rm -r ${SNAPCRAFT_PART_INSTALL}/share/applications/io.github.rsvzz.csven.desktop
       cp -v ${SNAPCRAFT_PROJECT_DIR}/data/desktop/io.github.rsvzz.csven-snap.desktop ${SNAPCRAFT_PART_INSTALL}/share/applications/io.github.rsvzz.csven.desktop
