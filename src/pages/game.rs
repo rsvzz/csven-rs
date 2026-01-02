@@ -2,16 +2,15 @@ use crate::model::ItemGame;
 use crate::pages::ViewPage;
 use adw::prelude::*;
 
-use gtk::{ prelude::*,
-    Align, Box, Builder, Button, CssProvider, Entry, GridView, NoSelection,
-    STYLE_PROVIDER_PRIORITY_APPLICATION, SignalListItemFactory,
+use gtk::{
+    Align, Box, Builder, Button, Entry, GridView, NoSelection,
+    SignalListItemFactory,
 };
 
 use gtk::gio::{ListModel, ListStore};
 use gtk::glib::{random_int_range, BindingFlags};
 
 use gtk::glib;
-use std::{env};
 
 #[derive(Clone)]
 pub struct Game {
@@ -20,32 +19,16 @@ pub struct Game {
     pub btn_start: Button,
     grid_view: GridView,
     grid_view_valid: GridView,
-    provider_css: CssProvider,
     pub name: String,
 }
 
 impl Game {
     pub fn new(build: &Builder) -> Self {
-        let provider = CssProvider::new();
-        let path = env::current_exe().expect("No path exe");
-
-        provider.load_from_path(
-            path.parent()
-                .unwrap()
-                .join("../share/csven/styles/io.github.rsvzz.csven.css")
-                .to_string_lossy()
-                .to_string(),
-        ); //release
-        //provider.load_from_path("data/styles/io.github.rsvzz.csven.css"); //devmode
-
         let p_box: Box = build.object("box_game_main").unwrap();
         let add_word: Entry = build.object("entry_game_word").unwrap();
         let btn_start: Button = build.object("btn_game_start").unwrap();
         
         btn_start.add_css_class("btn_reset");
-        btn_start
-            .style_context()
-            .add_provider(&provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         let grid_view: GridView = build.object("gv_game").unwrap();
 
@@ -62,8 +45,7 @@ impl Game {
 
         let factory = SignalListItemFactory::new();
 
-        factory.connect_setup({
-            let _provider = provider.clone();
+        factory.connect_setup(
             move |_, obj| {
                 let list_item = obj.downcast_ref::<gtk::ListItem>().unwrap();
                 let button = Button::builder()
@@ -71,12 +53,7 @@ impl Game {
                     .height_request(40)
                     .build();
                 button.add_css_class("btn_ramdon");
-                button
-                    .style_context()
-                    .add_provider(&_provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
-
                 list_item.set_child(Some(&button));
-            }
         });
 
         factory.connect_bind({
@@ -148,7 +125,6 @@ impl Game {
             btn_start,
             grid_view,
             grid_view_valid,
-            provider_css: provider.clone(),
             name,
         }
     }
@@ -166,8 +142,7 @@ impl Game {
 
         let factory = SignalListItemFactory::new();
 
-        factory.connect_setup({
-            let _provider = self.provider_css.clone();
+        factory.connect_setup(
             move |_, obj| {
                 let list_item = obj.downcast_ref::<gtk::ListItem>().unwrap();
                 let button = Button::builder()
@@ -176,12 +151,8 @@ impl Game {
                     .build();
 
                 button.add_css_class("btn_tittle");
-                button
-                    .style_context()
-                    .add_provider(&_provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
-
                 list_item.set_child(Some(&button));
-            }
+        
         });
 
         factory.connect_bind(|_, obj| {

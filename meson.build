@@ -1,6 +1,6 @@
 project('csven', 
 'rust',
- version: '0.1.27'
+ version: '0.1.28'
  )
  
  meson.add_dist_script(

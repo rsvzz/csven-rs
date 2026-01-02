@@ -12,7 +12,6 @@ use gdk::ContentProvider;
 use crate::model::{ItemGame, OptValid, ValidGridView};
 use crate::pages::ViewPage;
 use gtk::gio::{ListModel, ListStore};
-use std::{env};
 #[derive(Clone)]
 pub struct Drag {
     p_box: Box,
@@ -20,31 +19,16 @@ pub struct Drag {
     pub btn_start: Button,
     gv_valid: GridView,
     pub name: String,
-    provider_css: CssProvider,
     grid_view: GridView,
 }
 
 impl Drag {
     pub fn build(build: &Builder) -> Self {
-        let provider = CssProvider::new();
-       let path = env::current_exe().expect("No path exe");
-
-        provider.load_from_path(
-            path.parent()
-                .unwrap()
-                .join("../share/csven/styles/io.github.rsvzz.csven.css")
-                .to_string_lossy()
-                .to_string(),
-        ); //release
-        //provider.load_from_path("data/styles/io.github.rsvzz.csven.css"); //devmode
 
         let box_p: Box = build.object("pdragbox_main").unwrap();
         let word_et: Entry = build.object("entry_drag_word").unwrap();
         let start_btn: Button = build.object("btn_drag_start").unwrap();
         start_btn.add_css_class("btn_reset");
-        start_btn
-            .style_context()
-            .add_provider(&provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         let grid_view_valid: GridView = build.object("gdrag_tittle").unwrap();
         let view_grid = build.object("gv_verb").unwrap();
@@ -56,7 +40,6 @@ impl Drag {
             btn_start: start_btn,
             gv_valid: grid_view_valid,
             name: _name,
-            provider_css: provider.clone(),
             grid_view: view_grid,
         }
     }
@@ -91,19 +74,14 @@ impl Drag {
 
         let factory = SignalListItemFactory::new();
 
-        factory.connect_setup({
-            let _provider = self.provider_css.clone();
+        factory.connect_setup(
             move |_, obj| {
                 let list_item = obj.downcast_ref::<gtk::ListItem>().unwrap();
                 let button = Button::builder().build();
 
                 button.add_css_class("btn_tittle");
-                button
-                    .style_context()
-                    .add_provider(&_provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
-
                 list_item.set_child(Some(&button));
-            }
+            
         });
 
         factory.connect_bind(|_, obj| {
@@ -217,17 +195,13 @@ impl Drag {
             list_item.set_child(Some(&button));
         });
 
-        factory_drag.connect_bind({
-            let _provider = self.provider_css.clone();
+        factory_drag.connect_bind(
             move |_, obj| {
                 let list_item = obj.downcast_ref::<gtk::ListItem>().unwrap();
                 let button = list_item.child().and_downcast::<Button>().unwrap();
                 let valid_grid = list_item.item().and_downcast::<ValidGridView>().unwrap();
                 let item = valid_grid.item_g();
                 button.add_css_class("btn_ramdon");
-                button
-                    .style_context()
-                    .add_provider(&_provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
                 button.set_label(&item.name());
 
                 item.bind_property("name", &button, "label")
@@ -244,7 +218,7 @@ impl Drag {
                 let provider = ContentProvider::for_value(&valid_grid.clone().to_value());
                 drag_source.set_content(Some(&provider));
                 button.add_controller(drag_source.upcast::<EventController>());
-            }
+            
         });
 
         self.grid_view.set_factory(Some(&factory_drag));

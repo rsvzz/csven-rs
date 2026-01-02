@@ -6,17 +6,18 @@
   <summary>Order English words</summary>
   <description>
     <p>
-        CSVEN allows you to add an English word to mess it up and put it back together to learn how to write it through a game
+      CSVEN allows you to add an English word to mess it up and put it back together to learn how to
+      write it through a game
     </p>
   </description>
 
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
   <launchable type="desktop-id">io.github.rsvzz.csven.desktop</launchable>
-  
+
 
   <developer id="io.github.rsvzz">
-      <name>Ronald Sanchez</name>
+    <name>Ronald Sanchez</name>
   </developer>
   <provides>
     <binary>csven</binary>
@@ -26,44 +27,54 @@
   <url type="bugtracker">https://github.com/rsvzz/csven-rs.git</url>
 
   <releases>
+
+    <release version="0.1.27" date="2026-01-02">
+      <description translate="no">
+        <p>Changed:</p>
+        <ul>
+          <li>Code Optimization</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="0.1.27" date="2025-12-24">
-          <description translate="no">
-            <p>Changed:</p>
-            <ul>
-              <li>this version --locked libs don't change in this version interfaces</li>
-            </ul>
-          </description>
-        </release>
+      <description translate="no">
+        <p>Changed:</p>
+        <ul>
+          <li>this version --locked libs don't change in this version interfaces</li>
+        </ul>
+      </description>
+    </release>
 
-      <release version="0.1.25" date="2025-12-04">
-          <description translate="no">
-            <p>Changed:</p>
-            <ul>
-              <li>fix enter type in option game and drag</li>
-            </ul>
-          </description>
-        </release>
+    <release version="0.1.25" date="2025-12-04">
+      <description translate="no">
+        <p>Changed:</p>
+        <ul>
+          <li>fix enter type in option game and drag</li>
+        </ul>
+      </description>
+    </release>
 
-     <release version="0.1.24" date="2025-12-03">
-          <description translate="no">
-            <p>Changed:</p>
-            <ul>
-              <li>rust version</li>
-              <li>memory safe</li>
-            </ul>
-          </description>
-        </release>
-  
+    <release version="0.1.24" date="2025-12-03">
+      <description translate="no">
+        <p>Changed:</p>
+        <ul>
+          <li>rust version</li>
+          <li>memory safe</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="0.1.19" date="2025-09-26">
-          <description translate="no">
-            <p>Changed:</p>
-            <ul>
-              <li>move option to header</li>
-            </ul>
-          </description>
-        </release>
+      <description translate="no">
+        <p>Changed:</p>
+        <ul>
+          <li>move option to header</li>
+        </ul>
+      </description>
+    </release>
 
-  <release version="0.1.18" date="2025-08-13">
+    <release version="0.1.18" date="2025-08-13">
       <description translate="no">
         <p>Changed:</p>
         <ul>
@@ -73,7 +84,7 @@
       </description>
     </release>
 
-  <release version="0.1.16" date="2025-07-21">
+    <release version="0.1.16" date="2025-07-21">
       <description translate="no">
         <p>Changed:</p>
         <ul>
@@ -82,7 +93,7 @@
       </description>
     </release>
 
-  <release version="0.1.14" date="2025-07-10">
+    <release version="0.1.14" date="2025-07-10">
       <description translate="no">
         <p>Changed:</p>
         <ul>
@@ -91,7 +102,7 @@
       </description>
     </release>
 
-  <release version="0.1.12" date="2025-06-24">
+    <release version="0.1.12" date="2025-06-24">
       <description translate="no">
         <p>Changed:</p>
         <ul>
@@ -100,7 +111,7 @@
       </description>
     </release>
 
-  <release version="0.1.10" date="2025-06-16">
+    <release version="0.1.10" date="2025-06-16">
       <description translate="no">
         <p>Changed:</p>
         <ul>
@@ -109,7 +120,7 @@
       </description>
     </release>
 
-  <release version="0.1.8" date="2025-06-07">
+    <release version="0.1.8" date="2025-06-07">
       <description translate="no">
         <p>Changed:</p>
         <ul>
@@ -117,8 +128,8 @@
         </ul>
       </description>
     </release>
-  
-  <release version="0.1.5" date="2025-05-22">
+
+    <release version="0.1.5" date="2025-05-22">
       <description translate="no">
         <p>Changed:</p>
         <ul>
@@ -127,7 +138,7 @@
       </description>
     </release>
 
-   <release version="0.1.1" date="2025-04-10">
+    <release version="0.1.1" date="2025-04-10">
       <description translate="no">
         <p>Changed:</p>
         <ul>
@@ -145,18 +156,20 @@
       </description>
     </release>
   </releases>
- 
-   <screenshots>
 
-  <screenshot type="default">
-        <caption>Main window of csven light</caption>
-        <image type="source" width="800" height="800">https://raw.githubusercontent.com/rsvzz/csven-rs/f6ad81b58c04acb178811d37d57e304d2f69cbdf/data/screenshot/light.png</image>
-      </screenshot>
+  <screenshots>
 
-   <screenshot>
-        <caption>Main window of csven dark</caption>
-        <image type="source" width="800" height="800">https://raw.githubusercontent.com/rsvzz/csven-rs/f6ad81b58c04acb178811d37d57e304d2f69cbdf/data/screenshot/dark.png</image>
-      </screenshot>
+    <screenshot type="default">
+      <caption>Main window of csven light</caption>
+      <image type="source" width="800" height="800">
+        https://raw.githubusercontent.com/rsvzz/csven-rs/f6ad81b58c04acb178811d37d57e304d2f69cbdf/data/screenshot/light.png</image>
+    </screenshot>
+
+    <screenshot>
+      <caption>Main window of csven dark</caption>
+      <image type="source" width="800" height="800">
+        https://raw.githubusercontent.com/rsvzz/csven-rs/f6ad81b58c04acb178811d37d57e304d2f69cbdf/data/screenshot/dark.png</image>
+    </screenshot>
 
   </screenshots>
 

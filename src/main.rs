@@ -5,7 +5,7 @@ use adw::prelude::*;
 use adw::{AboutDialog, Application, ApplicationWindow, Dialog, EntryRow, ViewStack};
 
 use gtk::{
-    Box, Builder, Button, CssProvider, Label, MenuButton, STYLE_PROVIDER_PRIORITY_APPLICATION, gio,
+    Box, Builder, Button, CssProvider, Label, MenuButton, gio,
 };
 
 use std::env;
@@ -20,31 +20,52 @@ fn main() {
     let provider = CssProvider::new();
     let path = env::current_exe().expect("No path exe");
 
+    let css_file = "data/styles/io.github.rsvzz.csven.css"; //devmode
+    provider.load_from_path(css_file); //devmode
+   
+/* 
+    let css_file = "../share/csven/styles/io.github.rsvzz.csven.css";
     provider.load_from_path(
         path.parent()
             .unwrap()
-            .join("../share/csven/styles/io.github.rsvzz.csven.css")
+            .join(css_file)
             .to_string_lossy()
             .to_string(),
     ); //release
-    //provider.load_from_path("data/styles/io.github.rsvzz.csven.css"); //devmode
+*/
+    
+
+     gtk::style_context_add_provider_for_display(
+            &gtk::gdk::Display::default().unwrap(), 
+            &provider, 
+            gtk::STYLE_PROVIDER_PRIORITY_APPLICATION
+        );
 
     let app = Application::builder()
         .application_id("io.github.rsvzz.csven")
         .build();
 
     app.connect_activate({
-        let _provider = provider.clone();
         let dir = path.clone();
         move |app| {
-            // Crear la ventana principal
+            // Create main page.
+            let verb_ui = "../../data/ui/verb.ui";
+            let csven_ui = "../../data/ui/csven.ui";
+
+            //release
+            //let verb_ui = "../share/csven/ui/verb.ui";
+            //let csven_ui = "../share/csven/ui/csven.ui";
+            
             let build = Builder::from_file(
                 dir.parent()
                     .unwrap()
-                    .join("../share/csven/ui/csven.ui")
+                    .join(csven_ui) //devmode ../share/csven/ui/csven.ui
                     .to_string_lossy()
                     .to_string(),
             );
+
+       
+
             let window: ApplicationWindow = build.object("app").unwrap();
             window.set_default_width(700);
             window.set_default_height(600);
@@ -141,11 +162,12 @@ fn main() {
             let btn_add: Button = build.object("btn_add_header").unwrap();
             let stack_view: ViewStack = build.object("view_stack").unwrap();
 
-            //let verb_ui: Builder = Builder::from_file("/usr/local/share/csven/ui/verb.ui"); //release
+            //let verb_ui: Builder = Builder::from_file("../share/csven/ui/verb.ui"); //release
+ 
             let verb_ui: Builder = Builder::from_file(
                 dir.parent()
                     .unwrap()
-                    .join("../share/csven/ui/verb.ui")
+                    .join(verb_ui)
                     .to_string_lossy()
                     .to_string(),
             ); //devmode
@@ -183,21 +205,6 @@ fn main() {
                                 lbl_past.add_css_class("label_tittle");
                                 lbl_v3.add_css_class("label_tittle");
                                 lbl_ing.add_css_class("label_tittle");
-
-                                lbl_verb
-                                    .style_context()
-                                    .add_provider(&__provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-                                lbl_past
-                                    .style_context()
-                                    .add_provider(&__provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
-                                lbl_v3
-                                    .style_context()
-                                    .add_provider(&__provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-                                lbl_ing
-                                    .style_context()
-                                    .add_provider(&__provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
 
                                 let compare: ChangeChar = ChangeChar::new();
 
@@ -263,14 +270,19 @@ fn main() {
                 let _win = window.clone();
                 let _dir = dir.clone();
                 move |_, _| {
-                    let about_ui = Builder::from_file(
+                    let about_ui = "../../data/ui/about.ui"; //devmode
+                    
+                    //let about_ui = "../share/csven/ui/about.ui"; //release
+
+                    let about_build = Builder::from_file(
                         _dir.parent()
                             .unwrap()
-                            .join("../share/csven/ui/about.ui")
+                            .join(about_ui)
                             .to_string_lossy()
                             .to_string(),
                     );
-                    let _dialog: AboutDialog = about_ui.object("about_dialog").unwrap();
+                    
+                    let _dialog: AboutDialog = about_build.object("about_dialog").unwrap();
 
                     _dialog.present(Some(&_win));
                 }
