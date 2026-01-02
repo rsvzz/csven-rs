@@ -30,7 +30,7 @@ parts:
 
   csven:
     plugin: meson
-    source: https://github.com/rsvzz/csven-rs/releases/download/v0.1.27/csven_v0.1.27.tar.xz
+    source: https://github.com/rsvzz/csven-rs/releases/download/v0.1.28/csven-rs_v0.1.28_all.tar.xz
     meson-parameters:
       - --prefix=/
       - --buildtype=release
@@ -45,7 +45,7 @@ parts:
     override-pull: | 
       snapcraftctl pull 
       cp -rv ${CRAFT_PART_SRC}/vendor ${CRAFT_PART_BUILD}/vendor
-      cp -rv ${CRAFT_PART_SRC}/.cargo ${CRAFT_PART_BUILD}/.cargo
+      cp -r ${CRAFT_PART_SRC}/.cargo/config.toml ${CRAFT_PART_BUILD}/.cargo
     override-build: |
       snapcraftctl build
       rm -r ${SNAPCRAFT_PART_INSTALL}/share/applications/io.github.rsvzz.csven.desktop

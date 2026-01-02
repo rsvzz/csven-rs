@@ -20,10 +20,9 @@ fn main() {
     let provider = CssProvider::new();
     let path = env::current_exe().expect("No path exe");
 
-    let css_file = "data/styles/io.github.rsvzz.csven.css"; //devmode
-    provider.load_from_path(css_file); //devmode
+    //let css_file = "data/styles/io.github.rsvzz.csven.css"; //devmode
+    //provider.load_from_path(css_file); //devmode
    
-/* 
     let css_file = "../share/csven/styles/io.github.rsvzz.csven.css";
     provider.load_from_path(
         path.parent()
@@ -32,8 +31,6 @@ fn main() {
             .to_string_lossy()
             .to_string(),
     ); //release
-*/
-    
 
      gtk::style_context_add_provider_for_display(
             &gtk::gdk::Display::default().unwrap(), 
@@ -49,22 +46,19 @@ fn main() {
         let dir = path.clone();
         move |app| {
             // Create main page.
-            let verb_ui = "../../data/ui/verb.ui";
-            let csven_ui = "../../data/ui/csven.ui";
-
-            //release
-            //let verb_ui = "../share/csven/ui/verb.ui";
-            //let csven_ui = "../share/csven/ui/csven.ui";
+            //let verb_ui = "../../data/ui/verb.ui"; //devmode
+            //let csven_ui = "../../data/ui/csven.ui"; //devmode
+            
+            let verb_ui = "../share/csven/ui/verb.ui"; //release
+            let csven_ui = "../share/csven/ui/csven.ui"; //release
             
             let build = Builder::from_file(
                 dir.parent()
                     .unwrap()
-                    .join(csven_ui) //devmode ../share/csven/ui/csven.ui
+                    .join(csven_ui)
                     .to_string_lossy()
                     .to_string(),
             );
-
-       
 
             let window: ApplicationWindow = build.object("app").unwrap();
             window.set_default_width(700);
@@ -161,8 +155,6 @@ fn main() {
 
             let btn_add: Button = build.object("btn_add_header").unwrap();
             let stack_view: ViewStack = build.object("view_stack").unwrap();
-
-            //let verb_ui: Builder = Builder::from_file("../share/csven/ui/verb.ui"); //release
  
             let verb_ui: Builder = Builder::from_file(
                 dir.parent()
@@ -170,7 +162,8 @@ fn main() {
                     .join(verb_ui)
                     .to_string_lossy()
                     .to_string(),
-            ); //devmode
+            );
+
             btn_add.connect_clicked({
                 let _app = window.clone();
                 let _verb = verb_ui.clone();
@@ -270,9 +263,9 @@ fn main() {
                 let _win = window.clone();
                 let _dir = dir.clone();
                 move |_, _| {
-                    let about_ui = "../../data/ui/about.ui"; //devmode
+                    //let about_ui = "../../data/ui/about.ui"; //devmode
                     
-                    //let about_ui = "../share/csven/ui/about.ui"; //release
+                    let about_ui = "../share/csven/ui/about.ui"; //release
 
                     let about_build = Builder::from_file(
                         _dir.parent()
