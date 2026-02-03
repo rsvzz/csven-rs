@@ -21,8 +21,6 @@ fn main() {
     let provider = CssProvider::new();
     let path = env::current_exe().expect("No path exe");
 
-    //let css_file = "data/styles/io.github.rsvzz.csven.css"; //devmode
-    //provider.load_from_path(css_file); //devmode
     let css_file : &str;
      if cfg!(debug_assertions) {
          css_file = "../../data/styles/io.github.rsvzz.csven.css";
