@@ -1,3 +1,4 @@
+#![windows_subsystem = "windows"]
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -22,8 +23,14 @@ fn main() {
 
     //let css_file = "data/styles/io.github.rsvzz.csven.css"; //devmode
     //provider.load_from_path(css_file); //devmode
-   
-    let css_file = "../share/csven/styles/io.github.rsvzz.csven.css";
+    let css_file : &str;
+     if cfg!(debug_assertions) {
+         css_file = "../../data/styles/io.github.rsvzz.csven.css";
+     }
+     else{
+         css_file = "../share/csven/styles/io.github.rsvzz.csven.css";
+     }
+
     provider.load_from_path(
         path.parent()
             .unwrap()
@@ -46,11 +53,16 @@ fn main() {
         let dir = path.clone();
         move |app| {
             // Create main page.
-            //let verb_ui = "../../data/ui/verb.ui"; //devmode
-            //let csven_ui = "../../data/ui/csven.ui"; //devmode
-            
-            let verb_ui = "../share/csven/ui/verb.ui"; //release
-            let csven_ui = "../share/csven/ui/csven.ui"; //release
+            let verb_ui: &str;
+            let csven_ui: &str;
+            if cfg!(debug_assertions){
+                verb_ui = "../../data/ui/verb.ui"; //devmode
+                csven_ui = "../../data/ui/csven.ui"; //devmode
+            }
+            else{
+                verb_ui = "../share/csven/ui/verb.ui"; //release
+                csven_ui = "../share/csven/ui/csven.ui"; //release
+            }
             
             let build = Builder::from_file(
                 dir.parent()
@@ -263,9 +275,14 @@ fn main() {
                 let _win = window.clone();
                 let _dir = dir.clone();
                 move |_, _| {
-                    //let about_ui = "../../data/ui/about.ui"; //devmode
                     
-                    let about_ui = "../share/csven/ui/about.ui"; //release
+                    let about_ui: &str;
+                    if cfg!(debug_assertions){
+                         about_ui = "../../data/ui/about.ui"; //devmode
+                    }
+                    else{
+                         about_ui = "../share/csven/ui/about.ui"; //release
+                    }
 
                     let about_build = Builder::from_file(
                         _dir.parent()

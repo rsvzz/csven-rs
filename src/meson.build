@@ -17,13 +17,35 @@ icons_file = files(
 )
 install_data(icons_file, install_dir: get_option('prefix') / 'share/csven/ui')
 
-custom_target('csven',
-  output: 'csven',
+cargo_build = custom_target('cargo-build',
+  output: 'csven-build',
   build_by_default: true,
   env:['CARGO_HOME=' + meson.project_build_root() / 'cargo'],
-  install : true,
+  command: [
+    'cargo', 'build', '--release',
+    '--manifest-path', meson.project_source_root() / 'Cargo.toml',
+    '--target-dir', meson.project_build_root() / 'src'
+  ],
+  build_always_stale: true
+)
+
+exe_name = 'csven'
+if host_machine.system() == 'windows'
+  exe_name += '.exe'
+endif
+
+custom_target('csven',
+  output: exe_name,
+  build_by_default: true,
+  build_always_stale: true,
+  depends: cargo_build,
+  env:['CARGO_HOME=' + meson.project_build_root() / 'cargo'],
+  install: true,
   install_dir : get_option('bindir'),
-  command: ['cargo', 'build', '--release', '--manifest-path', meson.project_source_root() + '/Cargo.toml'
-  ,'--target-dir', meson.project_build_root() / 'src',
-   '&&', 'cp', meson.project_build_root() / 'src/release/csven', '@OUTPUT@']
+  command: [
+    'cargo', 'build', '--release',
+    '--manifest-path', meson.project_source_root() / 'Cargo.toml',
+    '--target-dir', meson.project_build_root() / 'src'
+  ],
+  command: ['cp', meson.project_build_root() / 'src/release/' + exe_name, '@OUTPUT@']
 )
