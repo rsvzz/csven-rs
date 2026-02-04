@@ -42,10 +42,5 @@ custom_target('csven',
   env:['CARGO_HOME=' + meson.project_build_root() / 'cargo'],
   install: true,
   install_dir : get_option('bindir'),
-  command: [
-    'cargo', 'build', '--release',
-    '--manifest-path', meson.project_source_root() / 'Cargo.toml',
-    '--target-dir', meson.project_build_root() / 'src'
-  ],
   command: ['cp', meson.project_build_root() / 'src/release/' + exe_name, '@OUTPUT@']
 )

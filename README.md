@@ -24,7 +24,7 @@ CSVEN allows you to add an English word to mess it up and put it back together t
 # Install
     meson build
     ninja -C build
-    sudo ninja -C build install
+    ninja -C build install
     
 # Uninstall
     sudo ninja uninstall
