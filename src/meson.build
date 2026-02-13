@@ -17,12 +17,21 @@ icons_file = files(
 )
 install_data(icons_file, install_dir: get_option('prefix') / 'share/csven/ui')
 
+buildtype = get_option('buildtype')
+cargo_flag = []
+src_exe = 'debug'
+
+if buildtype != 'debug'
+  cargo_flag = ['--release']
+  src_exe = 'release'
+endif
+
 cargo_build = custom_target('cargo-build',
   output: 'csven-build',
   build_by_default: true,
   env:['CARGO_HOME=' + meson.project_build_root() / 'cargo'],
   command: [
-    'cargo', 'build', '--release',
+    'cargo', 'build'] + cargo_flag + [
     '--manifest-path', meson.project_source_root() / 'Cargo.toml',
     '--target-dir', meson.project_build_root() / 'src'
   ],
@@ -42,5 +51,5 @@ custom_target('csven',
   env:['CARGO_HOME=' + meson.project_build_root() / 'cargo'],
   install: true,
   install_dir : get_option('bindir'),
-  command: ['cp', meson.project_build_root() / 'src/release/' + exe_name, '@OUTPUT@']
+  command: ['cp', meson.project_build_root() / 'src/' + src_exe + '/' + exe_name, '@OUTPUT@']
 )
