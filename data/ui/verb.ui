@@ -7,42 +7,48 @@
   <object class="AdwDialog" id="verb_dialog">
     <property name="child">
       <object class="GtkBox">
+        <property name="margin-bottom">4</property>
+        <property name="margin-end">5</property>
+        <property name="margin-start">5</property>
+        <property name="margin-top">5</property>
         <property name="orientation">vertical</property>
         <property name="spacing">5</property>
         <child>
-          <object class="AdwEntryRow" id="et_verb">
-            <property name="title">Verb :</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwEntryRow" id="et_past">
-            <property name="title">Past :</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwEntryRow" id="et_v3">
-            <property name="title">Participle :</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwEntryRow" id="et_ing">
-            <property name="title">ING :</property>
+          <object class="AdwPreferencesGroup">
+            <property name="title">Add Verbs</property>
+            <child>
+              <object class="AdwEntryRow" id="et_verb">
+                <property name="title">Verb :</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwEntryRow" id="et_past">
+                <property name="title">Past :</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwEntryRow" id="et_v3">
+                <property name="title">Participle :</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwEntryRow" id="et_ing">
+                <property name="title">ING :</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
           <object class="GtkActionBar" id="act_bar">
-            <property name="halign">baseline-center</property>
-            <property name="valign">baseline</property>
+            <property name="margin-top">5</property>
             <child type="start">
               <object class="GtkButton" id="btn_cancel">
                 <property name="icon-name">edit-delete-symbolic</property>
-                <property name="label">Cancel</property>
               </object>
             </child>
             <child type="end">
               <object class="GtkButton" id="btn_save">
-                <property name="icon-name">media-record-symbolic</property>
-                <property name="label">Save</property>
+                <property name="icon-name">document-save-symbolic</property>
               </object>
             </child>
           </object>

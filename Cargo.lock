@@ -49,7 +49,7 @@ dependencies = [
 
 [[package]]
 name = "csven"
-version = "0.1.27"
+version = "0.1.28"
 dependencies = [
  "gtk4",
  "libadwaita",
